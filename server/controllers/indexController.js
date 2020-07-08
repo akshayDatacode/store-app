@@ -39,4 +39,19 @@ const addProduct = async (req, res, next) => {
   });
 };
 
+// editProduct=====================================================================
+
+const editProduct = async (req, res) => {
+  const { id } = req.params;
+  const data = req.body;
+  try {
+    await productModel.findByIdAndUpdate(id, data);
+    res.send({ success: true });
+  } catch (error) {
+    console.error(error);
+    res.send({ success: false });
+  }
+};
+
 exports.addProduct = addProduct;
+exports.editProduct = editProduct;

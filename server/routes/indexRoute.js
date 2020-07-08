@@ -13,4 +13,6 @@ router.post(
   indexController.addProduct
 );
 
+router.put("/edit_product/:id", indexController.editProduct);
+
 module.exports = router;
