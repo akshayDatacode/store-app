@@ -32,7 +32,7 @@ class MainCompoonent extends Component {
         this.setState({
           products: result.data.product,
         });
-        this.intervalID = setTimeout(this.getMessages, 1000);
+        this.intervalID = setTimeout(this.getProducts, 1000);
       })
       .catch((error) =>
         this.setState({
