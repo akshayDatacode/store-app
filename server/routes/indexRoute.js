@@ -15,4 +15,6 @@ router.post(
 
 router.put("/edit_product/:id", indexController.editProduct);
 
+router.get("/get_products", indexController.getProducts);
+
 module.exports = router;

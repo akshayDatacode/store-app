@@ -39,6 +39,19 @@ const addProduct = async (req, res, next) => {
   });
 };
 
+
+// fetchMessages=====================================================================
+
+const getProducts = async (req, res) => {
+  try {
+    const product = await productModel.find({}).sort({ createdAt: -1 });
+    res.send({ product: product, success: true });
+  } catch (error) {
+    console.error(error);
+    res.send({ success: false });
+  }
+};
+
 // editProduct=====================================================================
 
 const editProduct = async (req, res) => {
@@ -55,3 +68,5 @@ const editProduct = async (req, res) => {
 
 exports.addProduct = addProduct;
 exports.editProduct = editProduct;
+exports.getProducts = getProducts;
+
