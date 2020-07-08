@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import HomeComponnt from "./HomeComponent";
 import AddProductComponent from "./AddProductComponent";
 import axios from "axios";
+import HeaderComponent from "./HeaderComponent";
 
 const add_product = "http://www.localhost:5000/api/add_product";
 const get_products = "http://www.localhost:5000/api/get_products";
@@ -14,6 +15,7 @@ class MainCompoonent extends Component {
     products: [],
     editProduct: [],
     isEdit: false,
+    cart: [],
   };
 
   componentDidMount() {
@@ -83,14 +85,33 @@ class MainCompoonent extends Component {
     });
   };
 
+  handleAddToCart = async (item) => {
+    console.log("data get ", item);
+    const cartRef = [...this.state.cart];
+    cartRef.push(item);
+    this.setState({
+      cart: cartRef,
+    });
+    console.log(cartRef);
+  };
+
   render() {
     return (
       <>
-        <h1>Main Component</h1>
-        <HomeComponnt
-          products={this.state.products}
-          handleEditProduct={this.handleEditProduct}
-        />
+        <div className="container">
+          <div className="row">
+            <div className="col-md-3"></div>
+            <div className="col-md-6">
+              <HomeComponnt
+                products={this.state.products}
+                handleEditProduct={this.handleEditProduct}
+                handleAddToCart={this.handleAddToCart}
+              />
+            </div>
+            <div className="col-md-3"></div>
+          </div>
+        </div>
+
         <AddProductComponent
           addProduct={this.addProduct}
           isEdit={this.state.isEdit}

@@ -98,7 +98,7 @@ class AddProductComponent extends Component {
                   Discount %
                 </label>
                 <div className="col-sm-10">
-                  <textarea
+                  <input
                     className="form-control"
                     placeholder="Discount %"
                     name="discount"

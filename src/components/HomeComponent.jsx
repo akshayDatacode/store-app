@@ -4,19 +4,24 @@ class HomeComponnt extends Component {
   render() {
     return (
       <>
-        <h1>Home Component</h1>
+        <h3 className="text-center mt-5 mb-3">Product List </h3>
         <div className="row">
           <div className="col">
             {this.props.products.map((item) => (
-              <div className="card">
+              <div className="card mb-3 shadow-lg border">
                 <div className="card-body">
-                  <h1>{item.title}</h1>
-                  <h2>{item.price}</h2>
-                  <h3>{item.size}</h3>
-                  <h4>{item.discount}</h4>
+                  <h3 className="text-primary">{item.title}</h3>
+                  <h6>Price : {item.price} /-</h6>
+                  <p>Size : {item.size}</p>
+                  <b className="text-success">Discount : {item.discount} %</b>
                 </div>
-                <div className="card-footer">
-                  <div className="btn btn-primary mr-2">Add to Cart</div>
+                <div className="card-footer m-0 pt-0 pb-2 bg-white border border-white ">
+                  <div
+                    className="btn btn-secondary mr-2"
+                    onClick={() => this.props.handleAddToCart(item)}
+                  >
+                    Add to Cart
+                  </div>
                   <div
                     className="btn btn-warning"
                     onClick={() => this.props.handleEditProduct(item)}
