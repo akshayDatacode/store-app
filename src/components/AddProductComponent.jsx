@@ -5,7 +5,21 @@ class AddProductComponent extends Component {
     price: "",
     size: "",
     discount: "",
+    id: "",
   };
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.isEdit !== this.props.isEdit && this.props.isEdit) {
+      this.setState({
+        title: this.props.editProduct.title,
+        price: this.props.editProduct.price,
+        size: this.props.editProduct.size,
+        discount: this.props.editProduct.discount,
+        id: this.props.editProduct._id,
+      });
+      console.log("Inside");
+    }
+  }
 
   handleSubmit = (event) => {
     event.preventDefault();
@@ -17,7 +31,7 @@ class AddProductComponent extends Component {
       discount: this.state.discount,
     };
 
-    this.props.addProduct(product);
+    this.props.addProduct(product, this.state.id);
 
     this.setState({ title: "", price: "", size: "", discount: "" });
   };

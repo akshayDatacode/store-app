@@ -6,15 +6,14 @@ import axios from "axios";
 const add_product = "http://www.localhost:5000/api/add_product";
 const get_products = "http://www.localhost:5000/api/get_products";
 
-
 class MainCompoonent extends Component {
   intervalID;
 
-
-
   state = {
     error: null,
-    products : []
+    products: [],
+    editProduct: [],
+    isEdit: false,
   };
 
   componentDidMount() {
@@ -41,27 +40,62 @@ class MainCompoonent extends Component {
       );
   };
 
-  
-  addProduct = (product) => {
+  addProduct = (product, id) => {
+    if (!id) {
+      axios
+        .post(add_product, product)
+        .then((res) => {
+          console.log(res.data);
+        })
+        .catch((error) => {
+          console.log(error);
+          this.setState({
+            error,
+          });
+        });
+    } else {
+      this.updateProduct(id, product);
+    }
+  };
+
+  updateProduct = (id, product) => {
+    console.log(id, product);
     axios
-      .post(add_product, product)
+      .put(`http://www.localhost:5000/api/edit_product/${id}`, product)
       .then((res) => {
-        console.log(res.data);
+        console.log(" Edit status", res.data);
       })
       .catch((error) => {
         console.log(error);
-        this.setState({
-          error,
-        });
       });
+
+    this.setState({ show: false });
+  };
+
+  handleEditProduct = async (item) => {
+    await this.setState((state) => {
+      if (state.isEdit) return { isEdit: false };
+    });
+    console.log(item);
+    this.setState({
+      editProduct: item,
+      isEdit: true,
+    });
   };
 
   render() {
     return (
       <>
         <h1>Main Component</h1>
-        <HomeComponnt products = {this.state.products}/>
-        <AddProductComponent addProduct={this.addProduct} />
+        <HomeComponnt
+          products={this.state.products}
+          handleEditProduct={this.handleEditProduct}
+        />
+        <AddProductComponent
+          addProduct={this.addProduct}
+          isEdit={this.state.isEdit}
+          editProduct={this.state.editProduct}
+        />
       </>
     );
   }
