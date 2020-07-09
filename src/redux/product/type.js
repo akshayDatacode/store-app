@@ -1,0 +1,9 @@
+export const ADD_PRODUCT_SUCCESS = "@product/ADD_PRODUCT_SUCCESS";
+export const ADD_PRODUCT_FAILURE = "@product/ADD_PRODUCT_FAILURE";
+export const ADD_PRODUCT_STARTED = "@product/ADD_PRODUCT_STARTED";
+export const GET_PRODUCTS = "@product/GET_PRODUCTS";
+export const GET_PRODUCTS_FAILURE = "@product/GET_PRODUCTS_FAILURE";
+export const EDIT_PRODUCT = "@product/EDIT_PRODUCT";
+export const UPDATE_PRODUCT_FAILURE = "@product/UPDATE_PRODUCT_FAILURE";
+export const UPDATE_PRODUCT = "@product/UPDATE_PRODUCT";
+export const ADD_TO_CART = "@product/ADD_TO_CART";

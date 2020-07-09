@@ -1,13 +1,16 @@
 import React from "react";
-import MainCompoonent from "./components/MainComponent";
 import "bootstrap/dist/css/bootstrap.css";
+import AppRoutes from "./app_routes/AppRoutes";
+import { BrowserRouter } from "react-router-dom";
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      <MainCompoonent />
-    </div>
+    <>
+      <BrowserRouter>
+        <AppRoutes />
+      </BrowserRouter>
+    </>
   );
-}
+};
 
 export default App;
