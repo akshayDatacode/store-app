@@ -1,6 +1,7 @@
 import React, { Component } from "react";
-class HomeComponnt extends Component {
-  state = {};
+import { Link } from "react-router-dom";
+
+class HomeComponent extends Component {
   render() {
     return (
       <>
@@ -22,13 +23,14 @@ class HomeComponnt extends Component {
                   >
                     Add to Cart
                   </div>
-                  <div
-                    className="btn btn-warning"
-                    onClick={() => this.props.handleEditProduct(item)}
-                  >
-                    {" "}
-                    Edit{" "}
-                  </div>
+                  <Link to="add_product">
+                    <div
+                      className="btn btn-warning"
+                      onClick={() => this.props.handleEditProduct(item)}
+                    >
+                      Edit
+                    </div>
+                  </Link>
                 </div>
               </div>
             ))}
@@ -39,4 +41,4 @@ class HomeComponnt extends Component {
   }
 }
 
-export default HomeComponnt;
+export default HomeComponent;

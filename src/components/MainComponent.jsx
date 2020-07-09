@@ -1,98 +1,83 @@
 import React, { Component } from "react";
-import HomeComponnt from "./HomeComponent";
-import AddProductComponent from "./AddProductComponent";
-import axios from "axios";
-import HeaderComponent from "./HeaderComponent";
+import HomeComponent from "./HomeComponent";
+import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import {
+  getProducts,
+  editProduct,
+  addToCart,
+} from "../redux/product/productAction";
 
-const add_product = "http://www.localhost:5000/api/add_product";
-const get_products = "http://www.localhost:5000/api/get_products";
-
-class MainCompoonent extends Component {
-  intervalID;
-
+class MainComponent extends Component {
   state = {
     error: null,
-    products: [],
-    editProduct: [],
     isEdit: false,
-    cart: [],
   };
 
   componentDidMount() {
-    this.getProducts();
+    this.props.getProducts();
   }
 
-  componentWillUnmount() {
-    clearTimeout(this.intervalID);
-  }
+  // getProducts = () => {
+  //   axios
+  //     .get(get_products)
+  //     .then((result) => {
+  //       this.setState({
+  //         products: result.data.product,
+  //       });
+  //       this.intervalID = setTimeout(this.getProducts, 1000);
+  //     })
+  //     .catch((error) =>
+  //       this.setState({
+  //         error,
+  //       })
+  //     );
+  // };
 
-  getProducts = () => {
-    axios
-      .get(get_products)
-      .then((result) => {
-        this.setState({
-          products: result.data.product,
-        });
-        this.intervalID = setTimeout(this.getProducts, 1000);
-      })
-      .catch((error) =>
-        this.setState({
-          error,
-        })
-      );
-  };
+  // addProduct = (product, id) => {
+  //   if (!id) {
+  //     axios
+  //       .post(add_product, product)
+  //       .then((res) => {
+  //         console.log(res.data);
+  //       })
+  //       .catch((error) => {
+  //         console.log(error);
+  //         this.setState({
+  //           error,
+  //         });
+  //       });
+  //   } else {
+  //     this.updateProduct(id, product);
+  //   }
+  // };
 
-  addProduct = (product, id) => {
-    if (!id) {
-      axios
-        .post(add_product, product)
-        .then((res) => {
-          console.log(res.data);
-        })
-        .catch((error) => {
-          console.log(error);
-          this.setState({
-            error,
-          });
-        });
-    } else {
-      this.updateProduct(id, product);
-    }
-  };
+  // updateProduct = (id, product) => {
+  //   console.log(id, product);
+  //   axios
+  //     .put(`http://www.localhost:5000/api/edit_product/${id}`, product)
+  //     .then((res) => {
+  //       console.log(" Edit status", res.data);
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
 
-  updateProduct = (id, product) => {
-    console.log(id, product);
-    axios
-      .put(`http://www.localhost:5000/api/edit_product/${id}`, product)
-      .then((res) => {
-        console.log(" Edit status", res.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-
-    this.setState({ show: false });
-  };
+  //   this.setState({ show: false });
+  // };
 
   handleEditProduct = async (item) => {
     await this.setState((state) => {
-      if (state.isEdit) return { isEdit: false };
+      if (this.props.isEdit) return { isEdit: false };
     });
     console.log(item);
-    this.setState({
-      editProduct: item,
-      isEdit: true,
-    });
+    this.setState({ isEdit: true });
+    this.props.editProduct(item);
   };
 
   handleAddToCart = async (item) => {
     console.log("data get ", item);
-    const cartRef = [...this.state.cart];
-    cartRef.push(item);
-    this.setState({
-      cart: cartRef,
-    });
-    console.log(cartRef);
+    this.props.addToCart(item);
   };
 
   render() {
@@ -102,8 +87,14 @@ class MainCompoonent extends Component {
           <div className="row">
             <div className="col-md-3"></div>
             <div className="col-md-6">
-              <HomeComponnt
-                products={this.state.products}
+              <Link to="/add_product">
+                <div className="btn btn-primary m-5">Add Product</div>
+              </Link>
+              <Link to="/cart">
+                <div className="btn btn-success">Cart</div>
+              </Link>
+              <HomeComponent
+                products={this.props.product}
                 handleEditProduct={this.handleEditProduct}
                 handleAddToCart={this.handleAddToCart}
               />
@@ -112,14 +103,27 @@ class MainCompoonent extends Component {
           </div>
         </div>
 
-        <AddProductComponent
+        {/* <AddProductComponent
           addProduct={this.addProduct}
           isEdit={this.state.isEdit}
           editProduct={this.state.editProduct}
-        />
+        /> */}
       </>
     );
   }
 }
 
-export default MainCompoonent;
+const mapStateToProps = (state) => {
+  return {
+    product: state.product,
+    isEdit: state.isEdit,
+    cart: state.cart,
+  };
+};
+const mapDispatchToProps = {
+  getProducts,
+  editProduct,
+  addToCart,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(MainComponent);
