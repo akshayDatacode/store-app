@@ -1,4 +1,10 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
+import {
+  addProductDetails,
+  updateProduct,
+} from "../redux/product/productAction";
+
 class AddProductComponent extends Component {
   state = {
     title: "",
@@ -18,6 +24,8 @@ class AddProductComponent extends Component {
         id: this.props.editProduct._id,
       });
       console.log("Inside");
+    } else {
+      console.log("Out Side");
     }
   }
 
@@ -30,8 +38,11 @@ class AddProductComponent extends Component {
       size: this.state.size,
       discount: this.state.discount,
     };
-
-    this.props.addProduct(product, this.state.id);
+    if (!this.props.isEdit) {
+      this.props.addProductDetails(product);
+    } else {
+      this.props.updateProduct(product, this.state.id);
+    }
 
     this.setState({ title: "", price: "", size: "", discount: "" });
   };
@@ -46,7 +57,7 @@ class AddProductComponent extends Component {
   render() {
     return (
       <>
-        <div className="row">
+        <div className="row mt-5">
           <div className="col-3"></div>
           <div className="col-6">
             <h2 className="text-center mb-5 text-primary">Add Product Form</h2>
@@ -127,4 +138,19 @@ class AddProductComponent extends Component {
   }
 }
 
-export default AddProductComponent;
+const mapStateToProps = (state) => {
+  return {
+    editProduct: state.editProduct,
+    isEdit: state.isEdit,
+  };
+};
+
+const mapDispatchToProps = {
+  addProductDetails,
+  updateProduct,
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(AddProductComponent);
