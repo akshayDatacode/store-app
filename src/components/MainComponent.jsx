@@ -17,12 +17,10 @@ class MainComponent extends Component {
   state = {
     error: null,
     isEdit: false,
-    product: [],
   };
 
   componentDidMount() {
     this.props.getProducts();
-    this.setState({ product: this.props.product });
   }
 
   // getProducts = () => {
@@ -94,33 +92,40 @@ class MainComponent extends Component {
           <div className="row">
             <div className="col-md-3"></div>
             <div className="col-md-6">
-              <Link to="/add_product">
-                <div className="btn btn-primary m-5">Add Product</div>
-              </Link>
-              <Link to="/cart">
-                <div className="btn btn-success">Cart</div>
-              </Link>
+              <div className="row mt-5">
+                <div className="col-5">
+                  <Link to="/add_product">
+                    <div className="btn btn-primary ">Add Product</div>
+                  </Link>
+                </div>
+                <div className="col-3">
+                  <Link to="/cart">
+                    <div className="btn btn-success">Cart</div>
+                  </Link>
+                </div>
+                <div className="col-4">
+                  <Dropdown>
+                    <Dropdown.Toggle variant="warning" id="dropdown-basic">
+                      Filter
+                    </Dropdown.Toggle>
 
-              <Dropdown>
-                <Dropdown.Toggle variant="success" id="dropdown-basic">
-                  Filter
-                </Dropdown.Toggle>
-
-                <Dropdown.Menu>
-                  <Dropdown.Item onClick={this.props.priceLowToHighFilter}>
-                    Price Low
-                  </Dropdown.Item>
-                  <Dropdown.Item onClick={this.props.priceHighToLowFilter}>
-                    Price High
-                  </Dropdown.Item>
-                  <Dropdown.Item onClick={this.props.ascendingFilter}>
-                    A - Z
-                  </Dropdown.Item>
-                  <Dropdown.Item onClick={this.props.descendingFilter}>
-                    Z - A
-                  </Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
+                    <Dropdown.Menu>
+                      <Dropdown.Item onClick={this.props.priceLowToHighFilter}>
+                        Price Low
+                      </Dropdown.Item>
+                      <Dropdown.Item onClick={this.props.priceHighToLowFilter}>
+                        Price High
+                      </Dropdown.Item>
+                      <Dropdown.Item onClick={this.props.ascendingFilter}>
+                        A - Z
+                      </Dropdown.Item>
+                      <Dropdown.Item onClick={this.props.descendingFilter}>
+                        Z - A
+                      </Dropdown.Item>
+                    </Dropdown.Menu>
+                  </Dropdown>
+                </div>
+              </div>
 
               <HomeComponent
                 products={this.props.product}

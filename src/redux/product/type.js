@@ -11,3 +11,4 @@ export const ASCENDING_FILTER = "@product/ASCENDING_FILTER";
 export const DESCENDING_FILTER = "@product/DESCENDING_FILTER";
 export const PRICR_HIGH_TO_LOW = "@product/PRICR_HIGH_TO_LOW";
 export const PRICR_LOW_TO_HIGH = "@product/PRICR_LOW_TO_HIGH";
+export const TOTAL_PRICE = "@product/TOTAL_PRICE";

@@ -12,6 +12,7 @@ import {
   DESCENDING_FILTER,
   PRICR_HIGH_TO_LOW,
   PRICR_LOW_TO_HIGH,
+  TOTAL_PRICE,
 } from "./type";
 
 import axios from "axios";
@@ -133,6 +134,14 @@ export const priceHighToLowFilter = () => {
   return (dispatch) => {
     dispatch({
       type: PRICR_HIGH_TO_LOW,
+    });
+  };
+};
+
+export const totalPrice = () => {
+  return (dispatch) => {
+    dispatch({
+      type: TOTAL_PRICE,
     });
   };
 };

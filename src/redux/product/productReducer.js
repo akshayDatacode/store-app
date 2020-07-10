@@ -12,6 +12,7 @@ import {
   DESCENDING_FILTER,
   PRICR_HIGH_TO_LOW,
   PRICR_LOW_TO_HIGH,
+  TOTAL_PRICE
 } from "./type";
 
 const initialState = {
@@ -20,6 +21,7 @@ const initialState = {
   error: null,
   isEdit: false,
   cart: [],
+  totalPriceValue : 0,
 };
 
 const reducer = (state = initialState, action) => {
@@ -70,6 +72,7 @@ const reducer = (state = initialState, action) => {
     case ADD_TO_CART:
       const cartRef = [...state.cart];
       cartRef.push(action.payload);
+      
       return {
         ...state,
         cart: cartRef,
@@ -110,6 +113,21 @@ const reducer = (state = initialState, action) => {
         ...state,
         product: LowToHigh,
       };
+
+      case TOTAL_PRICE:
+        const cartRefTotal = [...state.cart];  
+        console.log("In Side Reducer")
+        var totalPrice = 0
+        cartRefTotal.forEach( (item) => {
+          totalPrice = totalPrice + (item.price * (1 - (item.discount / 100 )))
+        });
+      console.log(totalPrice)
+      return {
+        ...state,
+        totalPriceValue : totalPrice,
+      };
+        
+
 
     default:
       return state;
