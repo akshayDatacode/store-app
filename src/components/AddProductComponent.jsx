@@ -4,6 +4,7 @@ import {
   addProductDetails,
   updateProduct,
 } from "../redux/product/productAction";
+import { Link } from "react-router-dom";
 
 class AddProductComponent extends Component {
   state = {
@@ -119,14 +120,14 @@ class AddProductComponent extends Component {
                 </div>
               </div>
               {this.props.error && <p className="text-danger">Enter Data</p>}
+
               <div className="form-group row">
                 <div className="col-sm-10">
-                  <button
-                    className="btn btn-primary"
-                    onClick={this.handleSubmit}
-                  >
-                    Add Product
-                  </button>
+                  <div onClick={this.handleSubmit}>
+                    <Link to="/">
+                      <div className="btn btn-primary ">Add Product</div>
+                    </Link>
+                  </div>
                 </div>
               </div>
             </form>
