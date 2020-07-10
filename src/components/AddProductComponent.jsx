@@ -5,6 +5,9 @@ import {
   updateProduct,
 } from "../redux/product/productAction";
 import { Link } from "react-router-dom";
+import { store } from "react-notifications-component";
+import "react-notifications-component/dist/theme.css";
+import "animate.css";
 
 class AddProductComponent extends Component {
   state = {
@@ -41,6 +44,17 @@ class AddProductComponent extends Component {
     };
     if (!this.props.isEdit) {
       this.props.addProductDetails(product);
+      store.addNotification({
+        title: "Success",
+        message: "Your New Product is Added",
+        type: "success", // 'default', 'success', 'info', 'warning'
+        container: "bottom-left", // where to position the notifications
+        animationIn: ["animated", "fadeIn"], // animate.css classes that's applied
+        animationOut: ["animated", "fadeOut"], // animate.css classes that's applied
+        dismiss: {
+          duration: 3000,
+        },
+      });
     } else {
       this.props.updateProduct(product, this.state.id);
     }
