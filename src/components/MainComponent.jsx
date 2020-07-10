@@ -6,16 +6,23 @@ import {
   getProducts,
   editProduct,
   addToCart,
+  ascendingFilter,
+  descendingFilter,
+  priceHighToLowFilter,
+  priceLowToHighFilter,
 } from "../redux/product/productAction";
+import { Dropdown } from "react-bootstrap";
 
 class MainComponent extends Component {
   state = {
     error: null,
     isEdit: false,
+    product: [],
   };
 
   componentDidMount() {
     this.props.getProducts();
+    this.setState({ product: this.props.product });
   }
 
   // getProducts = () => {
@@ -93,6 +100,28 @@ class MainComponent extends Component {
               <Link to="/cart">
                 <div className="btn btn-success">Cart</div>
               </Link>
+
+              <Dropdown>
+                <Dropdown.Toggle variant="success" id="dropdown-basic">
+                  Filter
+                </Dropdown.Toggle>
+
+                <Dropdown.Menu>
+                  <Dropdown.Item onClick={this.props.priceLowToHighFilter}>
+                    Price Low
+                  </Dropdown.Item>
+                  <Dropdown.Item onClick={this.props.priceHighToLowFilter}>
+                    Price High
+                  </Dropdown.Item>
+                  <Dropdown.Item onClick={this.props.ascendingFilter}>
+                    A - Z
+                  </Dropdown.Item>
+                  <Dropdown.Item onClick={this.props.descendingFilter}>
+                    Z - A
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+
               <HomeComponent
                 products={this.props.product}
                 handleEditProduct={this.handleEditProduct}
@@ -124,6 +153,10 @@ const mapDispatchToProps = {
   getProducts,
   editProduct,
   addToCart,
+  ascendingFilter,
+  descendingFilter,
+  priceHighToLowFilter,
+  priceLowToHighFilter,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(MainComponent);

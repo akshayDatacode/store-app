@@ -8,6 +8,10 @@ import {
   UPDATE_PRODUCT_FAILURE,
   UPDATE_PRODUCT,
   ADD_TO_CART,
+  ASCENDING_FILTER,
+  DESCENDING_FILTER,
+  PRICR_HIGH_TO_LOW,
+  PRICR_LOW_TO_HIGH,
 } from "./type";
 
 const initialState = {
@@ -69,6 +73,42 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         cart: cartRef,
+      };
+
+    case ASCENDING_FILTER:
+      const productRef = [...state.product];
+      const az = productRef.sort((a, b) => (a.title > b.title ? 1 : -1));
+      return {
+        ...state,
+        product: az,
+      };
+
+    case DESCENDING_FILTER:
+      const descendingRef = [...state.product];
+      const za = descendingRef.sort((a, b) => (a.title < b.title ? 1 : -1));
+      return {
+        ...state,
+        product: za,
+      };
+
+    case PRICR_HIGH_TO_LOW:
+      const highToLowRef = [...state.product];
+      const highToLow = highToLowRef.sort((a, b) =>
+        a.price < b.price ? 1 : -1
+      );
+      return {
+        ...state,
+        product: highToLow,
+      };
+
+    case PRICR_LOW_TO_HIGH:
+      const LowToHighRef = [...state.product];
+      const LowToHigh = LowToHighRef.sort((a, b) =>
+        a.price > b.price ? 1 : -1
+      );
+      return {
+        ...state,
+        product: LowToHigh,
       };
 
     default:

@@ -7,3 +7,7 @@ export const EDIT_PRODUCT = "@product/EDIT_PRODUCT";
 export const UPDATE_PRODUCT_FAILURE = "@product/UPDATE_PRODUCT_FAILURE";
 export const UPDATE_PRODUCT = "@product/UPDATE_PRODUCT";
 export const ADD_TO_CART = "@product/ADD_TO_CART";
+export const ASCENDING_FILTER = "@product/ASCENDING_FILTER";
+export const DESCENDING_FILTER = "@product/DESCENDING_FILTER";
+export const PRICR_HIGH_TO_LOW = "@product/PRICR_HIGH_TO_LOW";
+export const PRICR_LOW_TO_HIGH = "@product/PRICR_LOW_TO_HIGH";

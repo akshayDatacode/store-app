@@ -8,6 +8,10 @@ import {
   UPDATE_PRODUCT_FAILURE,
   UPDATE_PRODUCT,
   ADD_TO_CART,
+  ASCENDING_FILTER,
+  DESCENDING_FILTER,
+  PRICR_HIGH_TO_LOW,
+  PRICR_LOW_TO_HIGH,
 } from "./type";
 
 import axios from "axios";
@@ -97,6 +101,38 @@ export const addToCart = (cartRef) => {
     dispatch({
       type: ADD_TO_CART,
       payload: cartRef,
+    });
+  };
+};
+
+export const ascendingFilter = () => {
+  return (dispatch) => {
+    dispatch({
+      type: ASCENDING_FILTER,
+    });
+  };
+};
+
+export const descendingFilter = () => {
+  return (dispatch) => {
+    dispatch({
+      type: DESCENDING_FILTER,
+    });
+  };
+};
+
+export const priceLowToHighFilter = () => {
+  return (dispatch) => {
+    dispatch({
+      type: PRICR_LOW_TO_HIGH,
+    });
+  };
+};
+
+export const priceHighToLowFilter = () => {
+  return (dispatch) => {
+    dispatch({
+      type: PRICR_HIGH_TO_LOW,
     });
   };
 };
