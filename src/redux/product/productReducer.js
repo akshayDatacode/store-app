@@ -12,7 +12,9 @@ import {
   DESCENDING_FILTER,
   PRICR_HIGH_TO_LOW,
   PRICR_LOW_TO_HIGH,
-  TOTAL_PRICE
+  TOTAL_PRICE,
+  DECREASE_QUNTITY,
+  INCREASE_QUNTITY,
 } from "./type";
 
 const initialState = {
@@ -21,7 +23,8 @@ const initialState = {
   error: null,
   isEdit: false,
   cart: [],
-  totalPriceValue : 0,
+  cartCount: 0,
+  totalPriceValue: 0,
 };
 
 const reducer = (state = initialState, action) => {
@@ -72,10 +75,12 @@ const reducer = (state = initialState, action) => {
     case ADD_TO_CART:
       const cartRef = [...state.cart];
       cartRef.push(action.payload);
-      
+      const cartCount = cartRef.length;
+
       return {
         ...state,
         cart: cartRef,
+        cartCount: cartCount,
       };
 
     case ASCENDING_FILTER:
@@ -114,20 +119,53 @@ const reducer = (state = initialState, action) => {
         product: LowToHigh,
       };
 
-      case TOTAL_PRICE:
-        const cartRefTotal = [...state.cart];  
-        console.log("In Side Reducer")
-        var totalPrice = 0
-        cartRefTotal.forEach( (item) => {
-          totalPrice = totalPrice + (item.price * (1 - (item.discount / 100 )))
-        });
-      console.log(totalPrice)
+    case TOTAL_PRICE:
+      const cartRefTotal = [...state.cart];
+      console.log("In Side Reducer");
+      var totalPrice = 0;
+      cartRefTotal.forEach((item) => {
+        totalPrice = totalPrice + item.price * (1 - item.discount / 100);
+      });
+      console.log(totalPrice);
       return {
         ...state,
-        totalPriceValue : totalPrice,
+        totalPriceValue: totalPrice,
       };
-        
 
+    case INCREASE_QUNTITY:
+      const productQuantityRef = [...state.product];
+
+      productQuantityRef.push(
+        productQuantityRef.filter((item) => {
+          if (item == action.payload) {
+            if (item.quantity > 0) {
+              item.userQuantity += 1;
+              item.quantity -= 1;
+            }
+          }
+        })
+      );
+      return {
+        ...state,
+        product: productQuantityRef,
+      };
+    case DECREASE_QUNTITY:
+      const productQuantityDecreaseRef = [...state.product];
+
+      productQuantityDecreaseRef.push(
+        productQuantityDecreaseRef.filter((item) => {
+          if (item == action.payload) {
+            if (item.quantity > 0 && item.userQuantity != 0) {
+              item.userQuantity -= 1;
+              item.quantity += 1;
+            }
+          }
+        })
+      );
+      return {
+        ...state,
+        product: productQuantityDecreaseRef,
+      };
 
     default:
       return state;

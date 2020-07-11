@@ -13,6 +13,8 @@ import {
   PRICR_HIGH_TO_LOW,
   PRICR_LOW_TO_HIGH,
   TOTAL_PRICE,
+  DECREASE_QUNTITY,
+  INCREASE_QUNTITY,
 } from "./type";
 
 import axios from "axios";
@@ -142,6 +144,24 @@ export const totalPrice = () => {
   return (dispatch) => {
     dispatch({
       type: TOTAL_PRICE,
+    });
+  };
+};
+
+export const decreaseQuntity = (item) => {
+  return (dispatch) => {
+    dispatch({
+      type: DECREASE_QUNTITY,
+      payload: item,
+    });
+  };
+};
+
+export const increaseQuntity = (item) => {
+  return (dispatch) => {
+    dispatch({
+      type: INCREASE_QUNTITY,
+      payload: item,
     });
   };
 };

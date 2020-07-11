@@ -25,16 +25,7 @@ const HeaderComponent = (props) => {
             Add Product
           </div>
         </Link>
-        <Link to="/cart">
-          <div className="btn btn-outline-secondary my-2 my-sm-0">
-            <FontAwesomeIcon
-              icon={faCartPlus}
-              color="purple"
-              className="mr-2"
-            />
-            Cart
-          </div>
-        </Link>
+
         <Dropdown>
           <Dropdown.Toggle variant="warning" id="dropdown-basic">
             <FontAwesomeIcon icon={faAlignRight} className="mr-2" />
@@ -54,9 +45,25 @@ const HeaderComponent = (props) => {
             </Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
+        <Link to="/cart">
+          <div className="btn btn-outline-secondary my-2 my-sm-0">
+            <FontAwesomeIcon
+              icon={faCartPlus}
+              color="purple"
+              className="mr-2"
+              size="2x"
+            />
+            <h4 className="text-dark">{props.cartCount}</h4>
+          </div>
+        </Link>
       </nav>
     </>
   );
+};
+const mapStateToProps = (state) => {
+  return {
+    cartCount: state.cartCount,
+  };
 };
 
 const mapDispatchToProps = {
@@ -66,4 +73,4 @@ const mapDispatchToProps = {
   priceLowToHighFilter,
 };
 
-export default connect(null, mapDispatchToProps)(HeaderComponent);
+export default connect(mapStateToProps, mapDispatchToProps)(HeaderComponent);

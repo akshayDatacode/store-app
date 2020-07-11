@@ -15,13 +15,14 @@ const addProduct = async (req, res, next) => {
   }
 
   console.log(req.body);
-  const { title, price, size, discount } = req.body;
+  const { title, price, quantity, discount } = req.body;
 
   const createdProduct = new productModel({
     title,
     price,
-    size,
+    quantity,
     discount,
+    userQuantity: 0,
   });
 
   try {
@@ -34,11 +35,10 @@ const addProduct = async (req, res, next) => {
   res.status(201).json({
     title: createdProduct.title,
     price: createdProduct.price,
-    size: createdProduct.size,
+    quantity: createdProduct.quantity,
     discount: createdProduct.discount,
   });
 };
-
 
 // fetchMessages=====================================================================
 
@@ -69,4 +69,3 @@ const editProduct = async (req, res) => {
 exports.addProduct = addProduct;
 exports.editProduct = editProduct;
 exports.getProducts = getProducts;
-

@@ -13,7 +13,7 @@ class AddProductComponent extends Component {
   state = {
     title: "",
     price: "",
-    size: "",
+    quantity: "",
     discount: "",
     id: "",
   };
@@ -23,7 +23,7 @@ class AddProductComponent extends Component {
       this.setState({
         title: this.props.editProduct.title,
         price: this.props.editProduct.price,
-        size: this.props.editProduct.size,
+        quantity: this.props.editProduct.quantity,
         discount: this.props.editProduct.discount,
         id: this.props.editProduct._id,
       });
@@ -39,7 +39,7 @@ class AddProductComponent extends Component {
     const product = {
       title: this.state.title,
       price: this.state.price,
-      size: this.state.size,
+      quantity: this.state.quantity,
       discount: this.state.discount,
     };
     if (!this.props.isEdit) {
@@ -59,7 +59,7 @@ class AddProductComponent extends Component {
       this.props.updateProduct(product, this.state.id);
     }
 
-    this.setState({ title: "", price: "", size: "", discount: "" });
+    this.setState({ title: "", price: "", quantity: "", discount: "" });
   };
 
   handleInputChange = (event) => {
@@ -107,14 +107,14 @@ class AddProductComponent extends Component {
               </div>
               <div className="form-group row">
                 <label for="inputEmail3" className="col-sm-2 col-form-label">
-                  Size
+                  Quantity
                 </label>
                 <div className="col-sm-10">
                   <input
                     className="form-control"
                     placeholder="Sender Name"
-                    value={this.state.size}
-                    name="size"
+                    value={this.state.quantity}
+                    name="quantity"
                     onChange={this.handleInputChange}
                   />
                 </div>

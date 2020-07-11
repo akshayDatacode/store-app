@@ -5,17 +5,28 @@ import {
   getProducts,
   editProduct,
   addToCart,
+  increaseQuntity,
+  decreaseQuntity,
 } from "../redux/product/productAction";
 
 class MainComponent extends Component {
   state = {
     error: null,
     isEdit: false,
+    quantity: 0,
   };
 
   componentDidMount() {
     this.props.getProducts();
   }
+
+  increaseQuntity = (item) => {
+    this.props.increaseQuntity(item);
+  };
+
+  decreaseQuntity = (item) => {
+    this.props.decreaseQuntity(item);
+  };
 
   handleEditProduct = async (item) => {
     await this.setState((state) => {
@@ -40,8 +51,11 @@ class MainComponent extends Component {
             <div className="col-md-6">
               <HomeComponent
                 products={this.props.product}
+                quantity={this.state.quantity}
                 handleEditProduct={this.handleEditProduct}
                 handleAddToCart={this.handleAddToCart}
+                increaseQuntity={this.increaseQuntity}
+                decreaseQuntity={this.decreaseQuntity}
               />
             </div>
             <div className="col-md-3"></div>
@@ -63,6 +77,8 @@ const mapDispatchToProps = {
   getProducts,
   editProduct,
   addToCart,
+  increaseQuntity,
+  decreaseQuntity,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(MainComponent);

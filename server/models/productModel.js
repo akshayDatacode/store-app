@@ -7,8 +7,9 @@ const productSchema = new Schema(
     // Product  Information
     title: { type: String },
     price: { type: Number },
-    size: { type: Number },
+    quantity: { type: Number },
     discount: { type: Number },
+    userQuantity: { type: Number },
   },
   {
     timestamps: [{ createdAt: "created_at" }],
