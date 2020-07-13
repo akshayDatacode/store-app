@@ -157,7 +157,7 @@ const reducer = (state = initialState, action) => {
       productQuantityDecreaseRef.push(
         productQuantityDecreaseRef.filter((item) => {
           if (item == action.payload) {
-            if (item.quantity > 0 && item.userQuantity != 0) {
+            if (item.quantity >= 0 && item.userQuantity != 0) {
               item.userQuantity -= 1;
               item.quantity += 1;
             }
