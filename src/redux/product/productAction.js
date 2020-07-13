@@ -15,12 +15,15 @@ import {
   TOTAL_PRICE,
   DECREASE_QUNTITY,
   INCREASE_QUNTITY,
+  GET_CART,
 } from "./type";
 
 import axios from "axios";
 
 const add_product = "http://www.localhost:5000/api/add_product";
 const get_products = "http://www.localhost:5000/api/get_products";
+const add_cart = "http://www.localhost:5000/api/cart/add_cart";
+const get_cart = "http://www.localhost:5000/api/cart/get_cart";
 
 export const getProducts = () => {
   console.log("GetUsers");
@@ -99,12 +102,60 @@ export const updateProduct = (product, id) => {
   };
 };
 
-export const addToCart = (cartRef) => {
+// Cart Actions
+
+export const addToCart = (productId) => {
+  console.log("Cart Item", productId);
+
   return (dispatch) => {
-    dispatch({
-      type: ADD_TO_CART,
-      payload: cartRef,
-    });
+    console.log("Cart dispatch");
+
+    axios
+      .post(add_cart, { productId })
+      .then((res) => {
+        console.log("Add Status", res.data);
+        dispatch({
+          type: ADD_TO_CART,
+          payload: res.data,
+        });
+      })
+      .catch((err) => {
+        console.log("Aaction Get error ", err);
+        dispatch({
+          type: UPDATE_PRODUCT_FAILURE,
+          payload: {
+            ...err,
+          },
+        });
+      });
+  };
+};
+
+export const getProductsFromCart = () => {
+  console.log("GetCART");
+
+  return (dispatch) => {
+    console.log("GetCARTs dispatch");
+
+    axios
+      .get(get_cart)
+      .then((res) => {
+        const cart = res.data.cart;
+        console.log("Aaction Get  ", cart);
+        dispatch({
+          type: GET_CART,
+          payload: res.data.cart,
+        });
+      })
+      .catch((err) => {
+        console.log("Aaction Get Aeeror ", err);
+        dispatch({
+          type: GET_PRODUCTS_FAILURE,
+          payload: {
+            ...err,
+          },
+        });
+      });
   };
 };
 

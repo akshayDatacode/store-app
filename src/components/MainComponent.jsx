@@ -38,8 +38,8 @@ class MainComponent extends Component {
   };
 
   handleAddToCart = async (item) => {
-    console.log("data get ", item);
-    this.props.addToCart(item);
+    console.log("get ID ", item._id);
+    this.props.addToCart(item._id);
   };
 
   render() {

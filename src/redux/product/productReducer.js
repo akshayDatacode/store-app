@@ -15,6 +15,7 @@ import {
   TOTAL_PRICE,
   DECREASE_QUNTITY,
   INCREASE_QUNTITY,
+  GET_CART,
 } from "./type";
 
 const initialState = {
@@ -73,14 +74,9 @@ const reducer = (state = initialState, action) => {
         error: action.payload.error,
       };
     case ADD_TO_CART:
-      const cartRef = [...state.cart];
-      cartRef.push(action.payload);
-      const cartCount = cartRef.length;
-
       return {
         ...state,
-        cart: cartRef,
-        cartCount: cartCount,
+        error: null,
       };
 
     case ASCENDING_FILTER:
@@ -167,6 +163,13 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         product: productQuantityDecreaseRef,
+      };
+
+    case GET_CART:
+      console.log(action.payload);
+      return {
+        ...state,
+        cart: action.payload,
       };
 
     default:

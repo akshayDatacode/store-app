@@ -14,3 +14,4 @@ export const PRICR_LOW_TO_HIGH = "@product/PRICR_LOW_TO_HIGH";
 export const TOTAL_PRICE = "@product/TOTAL_PRICE";
 export const INCREASE_QUNTITY = "@product/INCREASE_QUNTITY";
 export const DECREASE_QUNTITY = "@product/DECREASE_QUNTITY";
+export const GET_CART = "@product/GET_CART";

@@ -13,6 +13,7 @@ import {
   descendingFilter,
   priceHighToLowFilter,
   priceLowToHighFilter,
+  getProductsFromCart,
 } from "../redux/product/productAction";
 
 import { Dropdown } from "react-bootstrap";
@@ -56,7 +57,7 @@ const HeaderComponent = (props) => {
             </Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
-        <Link to="/cart">
+        <Link to="/cart" onClick={props.getProductsFromCart}>
           <div className="btn btn-outline-light my-2 my-sm-0 pb-0">
             <h4 className="text-dark">
               <FontAwesomeIcon
@@ -84,6 +85,7 @@ const mapDispatchToProps = {
   descendingFilter,
   priceHighToLowFilter,
   priceLowToHighFilter,
+  getProductsFromCart,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(HeaderComponent);

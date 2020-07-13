@@ -19,52 +19,62 @@ class CartComponent extends Component {
           <div className="col-6 border border-dark mt-4">
             <h1 className="text-center text-primary mt-2  ">Cart Billing</h1>
 
-            {this.props.cart.map((item) => (
-              <div className="card mb-3 shadow-lg border">
-                <div className="card-body">
-                  <h6 className="text-primary text-weight-bold">
-                    <b>{item.title}</b>
-                  </h6>
-                  <h6 className="text-back"> Price :{item.price} /-</h6>
+            {this.props.cart.map((element) =>
+              this.props.product.map((item) => {
+                if (item._id == element.productId) {
+                  return (
+                    <div className="card mb-3 shadow-lg border">
+                      <div className="card-body">
+                        <h6 className="text-primary text-weight-bold">
+                          <b>{item.title}</b>
+                        </h6>
+                        <h6 className="text-back"> Price :{item.price} /-</h6>
 
-                  {/* <p>Quantity : {item.quantity}</p> */}
-                  <b className="text-secondary">Discount : {item.discount} %</b>
-                  <br />
+                        {/* <p>Quantity : {item.quantity}</p> */}
+                        <b className="text-secondary">
+                          Discount : {item.discount} %
+                        </b>
+                        <br />
 
-                  <div className="row">
-                    <div className="col-6">
-                      <h5 className="text-success">
-                        Net Price : {item.price * (1 - item.discount / 100)} /-
-                      </h5>
-                    </div>
-
-                    <div className="col-6 ">
-                      <div className="row ">
-                        <div className="col">
-                          <div className="row">
-                            <div className="col text-right">
-                              <p className="badge badge-primary ">
-                                Total Quantity : {item.userQuantity}
-                              </p>
-                            </div>
+                        <div className="row">
+                          <div className="col-6">
+                            <h5 className="text-success">
+                              Net Price :{" "}
+                              {item.price * (1 - item.discount / 100)} /-
+                            </h5>
                           </div>
-                          <div className="row">
-                            <div className="col">
-                              <h6 className="text-dark  text-right">
-                                Total Price :
-                                {item.userQuantity *
-                                  (item.price * (1 - item.discount / 100))}
-                                /-
-                              </h6>
+
+                          <div className="col-6 ">
+                            <div className="row ">
+                              <div className="col">
+                                <div className="row">
+                                  <div className="col text-right">
+                                    <p className="badge badge-primary ">
+                                      Total Quantity : {item.userQuantity}
+                                    </p>
+                                  </div>
+                                </div>
+                                <div className="row">
+                                  <div className="col">
+                                    <h6 className="text-dark  text-right">
+                                      Total Price :
+                                      {item.userQuantity *
+                                        (item.price *
+                                          (1 - item.discount / 100))}
+                                      /-
+                                    </h6>
+                                  </div>
+                                </div>
+                              </div>
                             </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                </div>
-              </div>
-            ))}
+                  );
+                }
+              })
+            )}
             {this.props.cart.length > 0 && (
               <div className="row border border-dark">
                 <div className="col">
@@ -86,6 +96,7 @@ const mapStateToProps = (state) => {
   return {
     cart: state.cart,
     totalPriceValue: state.totalPriceValue,
+    product: state.product,
   };
 };
 const mapDispatchToProps = {
