@@ -47,8 +47,8 @@ class MainComponent extends Component {
       <>
         <div className="container">
           <div className="row">
-            <div className="col-md-3"></div>
-            <div className="col-md-6">
+            <div className="col-1"></div>
+            <div className="col-11">
               <HomeComponent
                 products={this.props.product}
                 quantity={this.state.quantity}
@@ -58,7 +58,6 @@ class MainComponent extends Component {
                 decreaseQuntity={this.decreaseQuntity}
               />
             </div>
-            <div className="col-md-3"></div>
           </div>
         </div>
       </>

@@ -1,7 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCartPlus, faAlignRight } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCartPlus,
+  faAlignRight,
+  faStore,
+} from "@fortawesome/free-solid-svg-icons";
 import { connect } from "react-redux";
 
 import {
@@ -16,12 +20,19 @@ import { Dropdown } from "react-bootstrap";
 const HeaderComponent = (props) => {
   return (
     <>
-      <nav class="navbar navbar-light bg-light">
+      <nav class="navbar navbar-light bg-secondary">
         <Link class="navbar-brand" to="/">
-          Store
+          <h3 className="text-warning">
+            <FontAwesomeIcon
+              icon={faStore}
+              size="1x"
+              className="mr-1 text-white"
+            />
+            Store
+          </h3>
         </Link>
         <Link to="/add_product">
-          <div className="btn btn-outline-success my-2 my-sm-0 ">
+          <div className="btn btn-outline-warning my-2 my-sm-0 ">
             Add Product
           </div>
         </Link>
@@ -46,14 +57,16 @@ const HeaderComponent = (props) => {
           </Dropdown.Menu>
         </Dropdown>
         <Link to="/cart">
-          <div className="btn btn-outline-secondary my-2 my-sm-0">
-            <FontAwesomeIcon
-              icon={faCartPlus}
-              color="purple"
-              className="mr-2"
-              size="2x"
-            />
-            <h4 className="text-dark">{props.cartCount}</h4>
+          <div className="btn btn-outline-light my-2 my-sm-0 pb-0">
+            <h4 className="text-dark">
+              <FontAwesomeIcon
+                icon={faCartPlus}
+                color="orange"
+                className="mr-2"
+                size="1x"
+              />
+              {props.cartCount}
+            </h4>
           </div>
         </Link>
       </nav>

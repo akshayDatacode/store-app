@@ -1,6 +1,10 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { totalPrice } from "../redux/product/productAction";
+import {
+  totalPrice,
+  increaseQuntity,
+  decreaseQuntity,
+} from "../redux/product/productAction";
 
 class CartComponent extends Component {
   componentDidMount = () => {
@@ -13,20 +17,51 @@ class CartComponent extends Component {
         <div className="row ">
           <div className="col-3"></div>
           <div className="col-6 border border-dark mt-4">
-            <h1 className="text-center text-primary mt-2  ">Shopping Cart</h1>
+            <h1 className="text-center text-primary mt-2  ">Cart Billing</h1>
 
             {this.props.cart.map((item) => (
               <div className="card mb-3 shadow-lg border">
                 <div className="card-body">
-                  <h4 className="text-primary">{item.title}</h4>
-                  <h4 className="text-back"> Price :{item.price} /-</h4>
+                  <h6 className="text-primary text-weight-bold">
+                    <b>{item.title}</b>
+                  </h6>
+                  <h6 className="text-back"> Price :{item.price} /-</h6>
 
-                  <p>Quantity : {item.quantity}</p>
+                  {/* <p>Quantity : {item.quantity}</p> */}
                   <b className="text-secondary">Discount : {item.discount} %</b>
+                  <br />
 
-                  <h3 className="text-success">
-                    Net Price : {item.price * (1 - item.discount / 100)} /-
-                  </h3>
+                  <div className="row">
+                    <div className="col-6">
+                      <h5 className="text-success">
+                        Net Price : {item.price * (1 - item.discount / 100)} /-
+                      </h5>
+                    </div>
+
+                    <div className="col-6 ">
+                      <div className="row ">
+                        <div className="col">
+                          <div className="row">
+                            <div className="col text-right">
+                              <p className="badge badge-primary ">
+                                Total Quantity : {item.userQuantity}
+                              </p>
+                            </div>
+                          </div>
+                          <div className="row">
+                            <div className="col">
+                              <h6 className="text-dark  text-right">
+                                Total Price :
+                                {item.userQuantity *
+                                  (item.price * (1 - item.discount / 100))}
+                                /-
+                              </h6>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             ))}
@@ -55,6 +90,8 @@ const mapStateToProps = (state) => {
 };
 const mapDispatchToProps = {
   totalPrice,
+  increaseQuntity,
+  decreaseQuntity,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CartComponent);

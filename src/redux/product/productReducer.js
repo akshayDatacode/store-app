@@ -124,7 +124,9 @@ const reducer = (state = initialState, action) => {
       console.log("In Side Reducer");
       var totalPrice = 0;
       cartRefTotal.forEach((item) => {
-        totalPrice = totalPrice + item.price * (1 - item.discount / 100);
+        totalPrice =
+          totalPrice +
+          item.userQuantity * (item.price * (1 - item.discount / 100));
       });
       console.log(totalPrice);
       return {
