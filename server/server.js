@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 
 const indexRoutes = require("./routes/indexRoute");
+const cartRoutes = require("./routes/cartRoute");
 
 const app = express();
 
@@ -15,6 +16,7 @@ app.use(cors());
 
 //using routes
 app.use("/api", indexRoutes);
+app.use("/api/cart", cartRoutes);
 
 mongoose
   .connect("mongodb://127.0.0.1:27017/store", {
