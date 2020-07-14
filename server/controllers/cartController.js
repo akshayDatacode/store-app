@@ -39,10 +39,25 @@ const getProductsFromCart = async (req, res) => {
 // editProductToCart=====================================================================
 
 const editProductToCart = async (req, res) => {
-  const { id } = req.params;
-  const data = req.body;
+  console.log("BAcked Se AA Rha he Med", req.body.updateQuantity, req.params);
+
+  const update = { userQuantity: req.body.updateQuantity };
   try {
-    await cartModel.findByIdAndUpdate(id, data);
+    await cartModel.findOneAndUpdate(req.params, update);
+    res.send({ success: true });
+  } catch (error) {
+    console.error(error);
+    res.send({ success: false });
+  }
+};
+
+// DeleteProductToCart=====================================================================
+
+const deleteProductToCart = async (req, res) => {
+  console.log("DELETE WALA", req.params);
+
+  try {
+    await cartModel.deleteOne({ productId: req.params.id });
     res.send({ success: true });
   } catch (error) {
     console.error(error);
@@ -53,3 +68,4 @@ const editProductToCart = async (req, res) => {
 exports.addProductToCart = addProductToCart;
 exports.editProductToCart = editProductToCart;
 exports.getProductsFromCart = getProductsFromCart;
+exports.deleteProductToCart = deleteProductToCart;

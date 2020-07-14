@@ -4,10 +4,13 @@ import {
   totalPrice,
   increaseQuntity,
   decreaseQuntity,
+  deleteCartProduct,
+  getProductsFromCart,
 } from "../redux/product/productAction";
 
 class CartComponent extends Component {
   componentDidMount = () => {
+    this.props.getProductsFromCart();
     this.props.totalPrice();
   };
 
@@ -25,9 +28,24 @@ class CartComponent extends Component {
                   return (
                     <div className="card mb-3 shadow-lg border">
                       <div className="card-body">
-                        <h6 className="text-primary text-weight-bold">
-                          <b>{item.title}</b>
-                        </h6>
+                        <div className="row">
+                          <div className="col-6">
+                            <h6 className="text-primary text-weight-bold">
+                              <b>{item.title}</b>
+                            </h6>
+                          </div>
+                          <div className="col-6">
+                            <button
+                              className="btn btn-default"
+                              onClick={() =>
+                                this.props.deleteCartProduct(item._id)
+                              }
+                            >
+                              X
+                            </button>
+                          </div>
+                        </div>
+
                         <h6 className="text-back"> Price :{item.price} /-</h6>
 
                         {/* <p>Quantity : {item.quantity}</p> */}
@@ -103,6 +121,8 @@ const mapDispatchToProps = {
   totalPrice,
   increaseQuntity,
   decreaseQuntity,
+  deleteCartProduct,
+  getProductsFromCart,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CartComponent);

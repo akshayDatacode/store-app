@@ -16,6 +16,8 @@ import {
   DECREASE_QUNTITY,
   INCREASE_QUNTITY,
   GET_CART,
+  UPDATE_CART,
+  DELETE_CART_PRODUCT,
 } from "./type";
 
 import axios from "axios";
@@ -208,12 +210,62 @@ export const decreaseQuntity = (item) => {
   };
 };
 
-export const increaseQuntity = (item) => {
+// export const increaseQuntity = (item) => {
+//   return (dispatch) => {
+//     dispatch({
+//       type: INCREASE_QUNTITY,
+//       payload: item,
+//     });
+//   };
+// };
+
+export const increaseQuntity = (productId, updateQuantity, item) => {
   return (dispatch) => {
-    dispatch({
-      type: INCREASE_QUNTITY,
-      payload: item,
-    });
+    console.log("GetUsers dispatch EDIT CART", updateQuantity);
+
+    axios
+      .put(`http://www.localhost:5000/api/cart/edit_cart/${productId}`, {
+        updateQuantity,
+      })
+      .then((res) => {
+        console.log(" Edit status EDIT CART", res.data);
+        dispatch({
+          type: INCREASE_QUNTITY,
+          payload: item,
+        });
+      })
+      .catch((err) => {
+        console.log("Aaction Get Aeeror ", err);
+        dispatch({
+          type: UPDATE_PRODUCT_FAILURE,
+          payload: {
+            ...err,
+          },
+        });
+      });
+  };
+};
+
+export const deleteCartProduct = (id) => {
+  return (dispatch) => {
+    axios
+      .delete(`http://www.localhost:5000/api/cart/delete_cart_product/${id}`)
+      .then((res) => {
+        console.log("CART PRODUCT DELETED", res.data);
+        dispatch({
+          type: DELETE_CART_PRODUCT,
+          payload: id,
+        });
+      })
+      .catch((err) => {
+        console.log("Aaction Get Aeeror ", err);
+        dispatch({
+          type: UPDATE_PRODUCT_FAILURE,
+          payload: {
+            ...err,
+          },
+        });
+      });
   };
 };
 
