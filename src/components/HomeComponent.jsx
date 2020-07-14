@@ -20,7 +20,7 @@ class HomeComponent extends Component {
                           <b>{item.title}</b>
                         </h4>
                         <h6>Price : {item.price} /-</h6>
-                        {/* <p>Quantity : {item.quantity}</p> */}
+                        <p>Quantity : {item.quantity}</p>
                         <b className="text-success">
                           Discount : {item.discount} %
                         </b>

@@ -15,3 +15,6 @@ export const TOTAL_PRICE = "@product/TOTAL_PRICE";
 export const INCREASE_QUNTITY = "@product/INCREASE_QUNTITY";
 export const DECREASE_QUNTITY = "@product/DECREASE_QUNTITY";
 export const GET_CART = "@product/GET_CART";
+export const UPDATE_CART = "@product/UPDATE_CART";
+export const DELETE_CART_PRODUCT = "@product/DELETE_CART_PRODUCT";
+export const UPDATE_QUANTITY_IN_STORE = "@product/UPDATE_QUANTITY_IN_STORE";

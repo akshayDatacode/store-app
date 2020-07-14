@@ -16,6 +16,8 @@ import {
   DECREASE_QUNTITY,
   INCREASE_QUNTITY,
   GET_CART,
+  UPDATE_CART,
+  UPDATE_QUANTITY_IN_STORE,
 } from "./type";
 
 const initialState = {
@@ -132,13 +134,17 @@ const reducer = (state = initialState, action) => {
 
     case INCREASE_QUNTITY:
       const productQuantityRef = [...state.product];
-
+      const cartRef = [...state.cart];
       productQuantityRef.push(
         productQuantityRef.filter((item) => {
-          if (item == action.payload) {
+          if (item._id == action.payload._id) {
             if (item.quantity > 0) {
-              item.userQuantity += 1;
-              item.quantity -= 1;
+              cartRef.map((e) => {
+                if (item._id == e.productId) {
+                  item.userQuantity = e.userQuantity;
+                  item.quantity = item.quantity - e.userQuantity;
+                }
+              });
             }
           }
         })
@@ -152,7 +158,7 @@ const reducer = (state = initialState, action) => {
 
       productQuantityDecreaseRef.push(
         productQuantityDecreaseRef.filter((item) => {
-          if (item == action.payload) {
+          if (item._id === action.payload._id) {
             if (item.quantity >= 0 && item.userQuantity != 0) {
               item.userQuantity -= 1;
               item.quantity += 1;
@@ -163,6 +169,24 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         product: productQuantityDecreaseRef,
+      };
+
+    case UPDATE_QUANTITY_IN_STORE:
+      const productQuantityUpdateRef = [...state.product];
+      const cartQuantityUpdateRef = [...state.cart];
+      productQuantityUpdateRef.push(
+        productQuantityUpdateRef.filter((item) => {
+          cartQuantityUpdateRef.map((e) => {
+            if (item._id == e.productId) {
+              item.userQuantity = e.userQuantity;
+              item.quantity = item.quantity - e.userQuantity;
+            }
+          });
+        })
+      );
+      return {
+        ...state,
+        product: productQuantityUpdateRef,
       };
 
     case GET_CART:

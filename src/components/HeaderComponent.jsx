@@ -14,6 +14,7 @@ import {
   priceHighToLowFilter,
   priceLowToHighFilter,
   getProductsFromCart,
+  updatedQuantityInStore,
 } from "../redux/product/productAction";
 
 import { Dropdown } from "react-bootstrap";
@@ -22,7 +23,11 @@ const HeaderComponent = (props) => {
   return (
     <>
       <nav class="navbar navbar-light bg-secondary">
-        <Link class="navbar-brand" to="/">
+        <Link
+          class="navbar-brand"
+          to="/"
+          onClick={props.updatedQuantityInStore}
+        >
           <h3 className="text-warning">
             <FontAwesomeIcon
               icon={faStore}
@@ -86,6 +91,7 @@ const mapDispatchToProps = {
   priceHighToLowFilter,
   priceLowToHighFilter,
   getProductsFromCart,
+  updatedQuantityInStore,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(HeaderComponent);

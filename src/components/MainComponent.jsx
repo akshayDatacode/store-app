@@ -7,6 +7,8 @@ import {
   addToCart,
   increaseQuntity,
   decreaseQuntity,
+  getProductsFromCart,
+  updatedQuantityInStore,
 } from "../redux/product/productAction";
 
 class MainComponent extends Component {
@@ -18,14 +20,28 @@ class MainComponent extends Component {
 
   componentDidMount() {
     this.props.getProducts();
+    this.props.getProductsFromCart();
+    this.props.updatedQuantityInStore();
   }
 
   increaseQuntity = (item) => {
-    this.props.increaseQuntity(item);
+    this.props.getProductsFromCart();
+    var updatedQuantity = 0;
+    console.log("Inside Increase Function");
+    this.props.cart.forEach((element) => {
+      if (item._id == element.productId) {
+        {
+          updatedQuantity = element.userQuantity + 1;
+
+          this.props.increaseQuntity(item._id, updatedQuantity, item);
+          console.log(updatedQuantity, item);
+        }
+      }
+    });
   };
 
   decreaseQuntity = (item) => {
-    this.props.decreaseQuntity(item);
+    this.props.decreaseQuntity(item._id);
   };
 
   handleEditProduct = async (item) => {
@@ -51,6 +67,7 @@ class MainComponent extends Component {
             <div className="col-11">
               <HomeComponent
                 products={this.props.product}
+                cart={this.props.cart}
                 quantity={this.state.quantity}
                 handleEditProduct={this.handleEditProduct}
                 handleAddToCart={this.handleAddToCart}
@@ -78,6 +95,8 @@ const mapDispatchToProps = {
   addToCart,
   increaseQuntity,
   decreaseQuntity,
+  getProductsFromCart,
+  updatedQuantityInStore,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(MainComponent);

@@ -18,6 +18,7 @@ import {
   GET_CART,
   UPDATE_CART,
   DELETE_CART_PRODUCT,
+  UPDATE_QUANTITY_IN_STORE,
 } from "./type";
 
 import axios from "axios";
@@ -206,6 +207,14 @@ export const decreaseQuntity = (item) => {
     dispatch({
       type: DECREASE_QUNTITY,
       payload: item,
+    });
+  };
+};
+
+export const updatedQuantityInStore = () => {
+  return (dispatch) => {
+    dispatch({
+      type: UPDATE_QUANTITY_IN_STORE,
     });
   };
 };
