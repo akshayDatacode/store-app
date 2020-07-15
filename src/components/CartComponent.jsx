@@ -5,29 +5,80 @@ import { faPlus, faMinus, faCartPlus } from "@fortawesome/free-solid-svg-icons";
 import { connect } from "react-redux";
 import {
   totalPrice,
-  increaseQuntity,
+  updateQuntity,
   decreaseQuntity,
   deleteCartProduct,
   getProductsFromCart,
+  updateProduct,
+  getProducts,
 } from "../redux/product/productAction";
 
 class CartComponent extends Component {
-  componentDidMount = () => {
-    this.props.getProductsFromCart();
-    this.props.totalPrice();
-  };
+  componentDidMount() {
+    this.timer = setInterval(() => this.props.getProductsFromCart(), 500);
+    this.timer2 = setInterval(() => this.props.getProducts(), 500);
+    this.timer3 = setInterval(() => this.props.totalPrice(), 500);
+  }
+
+  componentWillUnmount() {
+    clearTimeout(setTimeout(this.props.getProductsFromCart(), 500));
+    clearInterval(this.timer);
+    this.timer = null;
+    clearTimeout(setTimeout(this.props.getProducts(), 500));
+    clearInterval(this.timer2);
+    this.timer2 = null;
+    clearTimeout(setTimeout(this.props.getProducts(), 500));
+    clearInterval(this.timer3);
+    this.timer3 = null;
+  }
 
   increaseQuntity = (item) => {
     this.props.getProductsFromCart();
-    var updatedQuantity = 0;
+    var userQuantity = 0;
     console.log("Inside Increase Function");
     this.props.cart.forEach((element) => {
       if (item._id == element.productId) {
         {
-          updatedQuantity = element.userQuantity + 1;
+          userQuantity = element.userQuantity + 1;
 
-          this.props.increaseQuntity(item._id, updatedQuantity, item);
-          console.log(updatedQuantity, item);
+          this.props.updateQuntity(element._id, { userQuantity }, item);
+          this.props.updateProduct({ userQuantity }, item._id);
+          console.log(userQuantity, element._id);
+        }
+      }
+    });
+  };
+
+  decreaseQuntity = (item) => {
+    this.props.getProductsFromCart();
+    var userQuantity = 0;
+    console.log("Inside Increase Function");
+    this.props.cart.forEach((element) => {
+      if (item._id == element.productId) {
+        {
+          userQuantity = element.userQuantity - 1;
+
+          this.props.updateQuntity(element._id, { userQuantity }, item);
+          this.props.updateProduct({ userQuantity }, item._id);
+          console.log(userQuantity, element._id);
+        }
+      }
+    });
+  };
+
+  deleteCartProduct = (item) => {
+    this.props.getProductsFromCart();
+    var userQuantity = 0;
+    console.log("Inside Increase Function");
+    this.props.cart.forEach((element) => {
+      if (item._id == element.productId) {
+        {
+          userQuantity = 0;
+
+          this.props.updateQuntity(element._id, { userQuantity }, item);
+          this.props.updateProduct({ userQuantity }, item._id);
+          this.props.deleteCartProduct(item._id);
+          console.log(userQuantity, element._id);
         }
       }
     });
@@ -53,14 +104,12 @@ class CartComponent extends Component {
                               <b>{item.title}</b>
                             </h6>
                           </div>
-                          <div className="col-6">
+                          <div className="col-6 text-right">
                             <button
                               className="btn btn-default"
-                              onClick={() =>
-                                this.props.deleteCartProduct(item._id)
-                              }
+                              onClick={() => this.deleteCartProduct(item)}
                             >
-                              X
+                              [X]
                             </button>
                           </div>
                         </div>
@@ -103,22 +152,21 @@ class CartComponent extends Component {
                                   </div>
                                 </div>
                                 <div className="row">
-                                  <div
-                                    className="btn  mr-2 btn-sm"
-                                    onClick={() =>
-                                      this.props.decreaseQuntity(item)
-                                    }
-                                  >
-                                    <FontAwesomeIcon
-                                      icon={faMinus}
-                                      color="red"
-                                    />
-                                  </div>
-
+                                  {item.userQuantity > 0 && (
+                                    <div
+                                      className="btn  mr-2 btn-sm"
+                                      onClick={() => this.decreaseQuntity(item)}
+                                    >
+                                      <FontAwesomeIcon
+                                        icon={faMinus}
+                                        color="red"
+                                      />
+                                    </div>
+                                  )}
                                   <div className="badge badge-primary">
                                     {item.userQuantity}
                                   </div>
-                                  {item.quantity != 0 && (
+                                  {item.quantity - item.userQuantity != 0 && (
                                     <div
                                       className="btn  ml-2 btn-sm"
                                       onClick={() => this.increaseQuntity(item)}
@@ -166,10 +214,12 @@ const mapStateToProps = (state) => {
 };
 const mapDispatchToProps = {
   totalPrice,
-  increaseQuntity,
+  updateQuntity,
   decreaseQuntity,
   deleteCartProduct,
   getProductsFromCart,
+  updateProduct,
+  getProducts,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CartComponent);

@@ -119,13 +119,20 @@ const reducer = (state = initialState, action) => {
 
     case TOTAL_PRICE:
       const cartRefTotal = [...state.cart];
+      const productTotalRef = [...state.product];
       console.log("In Side Reducer");
       var totalPrice = 0;
-      cartRefTotal.forEach((item) => {
-        totalPrice =
-          totalPrice +
-          item.userQuantity * (item.price * (1 - item.discount / 100));
+      cartRefTotal.map((e) => {
+        productTotalRef.forEach((item) => {
+          if (item._id === e.productId) {
+            console.log("Inside a IF of TOtal");
+            totalPrice =
+              totalPrice +
+              item.userQuantity * (item.price * (1 - item.discount / 100));
+          }
+        });
       });
+
       console.log(totalPrice);
       return {
         ...state,
@@ -141,7 +148,6 @@ const reducer = (state = initialState, action) => {
             if (item.quantity > 0) {
               cartRef.map((e) => {
                 if (item._id == e.productId) {
-                  item.userQuantity = e.userQuantity;
                   item.quantity = item.quantity - e.userQuantity;
                 }
               });
@@ -194,6 +200,7 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         cart: action.payload,
+        cartCount: action.payload.length,
       };
 
     default:

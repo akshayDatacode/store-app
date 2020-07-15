@@ -149,6 +149,7 @@ export const getProductsFromCart = () => {
           type: GET_CART,
           payload: res.data.cart,
         });
+        setTimeout(getProductsFromCart, 1000);
       })
       .catch((err) => {
         console.log("Aaction Get Aeeror ", err);
@@ -211,14 +212,6 @@ export const decreaseQuntity = (item) => {
   };
 };
 
-export const updatedQuantityInStore = () => {
-  return (dispatch) => {
-    dispatch({
-      type: UPDATE_QUANTITY_IN_STORE,
-    });
-  };
-};
-
 // export const increaseQuntity = (item) => {
 //   return (dispatch) => {
 //     dispatch({
@@ -228,14 +221,12 @@ export const updatedQuantityInStore = () => {
 //   };
 // };
 
-export const increaseQuntity = (productId, updateQuantity, item) => {
+export const updateQuntity = (id, userQuantity, item) => {
   return (dispatch) => {
-    console.log("GetUsers dispatch EDIT CART", updateQuantity);
+    console.log("GetUsers dispatch EDIT CART", userQuantity);
 
     axios
-      .put(`http://www.localhost:5000/api/cart/edit_cart/${productId}`, {
-        updateQuantity,
-      })
+      .put(`http://www.localhost:5000/api/cart/edit_cart/${id}`, userQuantity)
       .then((res) => {
         console.log(" Edit status EDIT CART", res.data);
         dispatch({

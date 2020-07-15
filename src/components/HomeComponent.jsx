@@ -20,7 +20,7 @@ class HomeComponent extends Component {
                           <b>{item.title}</b>
                         </h4>
                         <h6>Price : {item.price} /-</h6>
-                        <p>Quantity : {item.quantity}</p>
+                        <p>Quantity : {item.quantity - item.userQuantity}</p>
                         <b className="text-success">
                           Discount : {item.discount} %
                         </b>
@@ -41,17 +41,18 @@ class HomeComponent extends Component {
                             </div>
                           </div>
                           <div className="col-6 text-center ">
-                            <div
-                              className="btn  mr-2 btn-sm"
-                              onClick={() => this.props.decreaseQuntity(item)}
-                            >
-                              <FontAwesomeIcon icon={faMinus} color="red" />
-                            </div>
-
+                            {item.userQuantity > 0 && (
+                              <div
+                                className="btn  mr-2 btn-sm"
+                                onClick={() => this.props.decreaseQuntity(item)}
+                              >
+                                <FontAwesomeIcon icon={faMinus} color="red" />
+                              </div>
+                            )}
                             <div className="badge badge-primary">
                               {item.userQuantity}
                             </div>
-                            {item.quantity != 0 && (
+                            {item.quantity - item.userQuantity != 0 && (
                               <div
                                 className="btn  ml-2 btn-sm"
                                 onClick={() => this.props.increaseQuntity(item)}

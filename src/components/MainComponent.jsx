@@ -5,10 +5,10 @@ import {
   getProducts,
   editProduct,
   addToCart,
-  increaseQuntity,
+  updateQuntity,
   decreaseQuntity,
   getProductsFromCart,
-  updatedQuantityInStore,
+  updateProduct,
 } from "../redux/product/productAction";
 
 class MainComponent extends Component {
@@ -19,29 +19,51 @@ class MainComponent extends Component {
   };
 
   componentDidMount() {
-    this.props.getProducts();
-    this.props.getProductsFromCart();
-    this.props.updatedQuantityInStore();
+    this.timer = setInterval(() => this.props.getProductsFromCart(), 500);
+    this.timer2 = setInterval(() => this.props.getProducts(), 500);
+  }
+
+  componentWillUnmount() {
+    clearTimeout(setTimeout(this.props.getProductsFromCart(), 500));
+    clearInterval(this.timer);
+    this.timer = null;
+    clearTimeout(setTimeout(this.props.getProducts(), 500));
+    clearInterval(this.timer2);
+    this.timer2 = null;
   }
 
   increaseQuntity = (item) => {
     this.props.getProductsFromCart();
-    var updatedQuantity = 0;
+    var userQuantity = 0;
     console.log("Inside Increase Function");
     this.props.cart.forEach((element) => {
       if (item._id == element.productId) {
         {
-          updatedQuantity = element.userQuantity + 1;
+          userQuantity = element.userQuantity + 1;
 
-          this.props.increaseQuntity(item._id, updatedQuantity, item);
-          console.log(updatedQuantity, item);
+          this.props.updateQuntity(element._id, { userQuantity }, item);
+          this.props.updateProduct({ userQuantity }, item._id);
+          console.log(userQuantity, element._id);
         }
       }
     });
   };
 
   decreaseQuntity = (item) => {
-    this.props.decreaseQuntity(item._id);
+    this.props.getProductsFromCart();
+    var userQuantity = 0;
+    console.log("Inside Increase Function");
+    this.props.cart.forEach((element) => {
+      if (item._id == element.productId) {
+        {
+          userQuantity = element.userQuantity - 1;
+
+          this.props.updateQuntity(element._id, { userQuantity }, item);
+          this.props.updateProduct({ userQuantity }, item._id);
+          console.log(userQuantity, element._id);
+        }
+      }
+    });
   };
 
   handleEditProduct = async (item) => {
@@ -93,10 +115,10 @@ const mapDispatchToProps = {
   getProducts,
   editProduct,
   addToCart,
-  increaseQuntity,
+  updateQuntity,
   decreaseQuntity,
   getProductsFromCart,
-  updatedQuantityInStore,
+  updateProduct,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(MainComponent);

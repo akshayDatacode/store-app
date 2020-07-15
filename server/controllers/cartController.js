@@ -39,11 +39,11 @@ const getProductsFromCart = async (req, res) => {
 // editProductToCart=====================================================================
 
 const editProductToCart = async (req, res) => {
-  console.log("BAcked Se AA Rha he Med", req.body.updateQuantity, req.params);
-
-  const update = { userQuantity: req.body.updateQuantity };
+  console.log("BAcked Se AA Rha he Med", req.body.userQuantity, req.params);
+  const { id } = req.params;
+  const data = req.body;
   try {
-    await cartModel.findOneAndUpdate(req.params, update);
+    await cartModel.findByIdAndUpdate(id, data);
     res.send({ success: true });
   } catch (error) {
     console.error(error);
