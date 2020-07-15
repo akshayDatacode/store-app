@@ -1,8 +1,9 @@
 const express = require("express");
-
+const checkToken = require("../middlewares/checkToken");
 const cartController = require("../controllers/cartController");
 
 const router = express.Router();
+router.use(checkToken);
 
 router.post("/add_cart", cartController.addProductToCart);
 
