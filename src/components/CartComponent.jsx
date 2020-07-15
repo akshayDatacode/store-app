@@ -1,7 +1,13 @@
 import React, { Component } from "react";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faMinus, faCartPlus } from "@fortawesome/free-solid-svg-icons";
+import {
+  faPlus,
+  faMinus,
+  faCross,
+  faCrosshairs,
+  faStar,
+} from "@fortawesome/free-solid-svg-icons";
 import { connect } from "react-redux";
 import {
   totalPrice,
@@ -109,28 +115,51 @@ class CartComponent extends Component {
                               className="btn btn-default"
                               onClick={() => this.deleteCartProduct(item)}
                             >
-                              [X]
+                              <h6 className="text-danger">
+                                <b>X</b>
+                              </h6>
                             </button>
                           </div>
                         </div>
 
                         <h6 className="text-back"> Price :{item.price} /-</h6>
 
-                        <p>Quantity : {item.quantity}</p>
+                        <p>Quantity : {item.quantity - item.userQuantity}</p>
                         <b className="text-secondary">
                           Discount : {item.discount} %
                         </b>
                         <br />
 
                         <div className="row">
-                          <div className="col-6">
+                          <div className="col-4">
                             <h5 className="text-success">
                               Net Price :{" "}
                               {item.price * (1 - item.discount / 100)} /-
                             </h5>
                           </div>
+                          <div className="col-4 text-center">
+                            {item.userQuantity > 0 && (
+                              <div
+                                className="btn  mr-2 btn-sm"
+                                onClick={() => this.decreaseQuntity(item)}
+                              >
+                                <FontAwesomeIcon icon={faMinus} color="red" />
+                              </div>
+                            )}
+                            <div className="badge badge-primary">
+                              {item.userQuantity}
+                            </div>
+                            {item.quantity - item.userQuantity != 0 && (
+                              <div
+                                className="btn  ml-2 btn-sm"
+                                onClick={() => this.increaseQuntity(item)}
+                              >
+                                <FontAwesomeIcon icon={faPlus} color="green" />
+                              </div>
+                            )}
+                          </div>
 
-                          <div className="col-6 ">
+                          <div className="col-4 ">
                             <div className="row ">
                               <div className="col">
                                 <div className="row">
@@ -150,33 +179,6 @@ class CartComponent extends Component {
                                       /-
                                     </h6>
                                   </div>
-                                </div>
-                                <div className="row">
-                                  {item.userQuantity > 0 && (
-                                    <div
-                                      className="btn  mr-2 btn-sm"
-                                      onClick={() => this.decreaseQuntity(item)}
-                                    >
-                                      <FontAwesomeIcon
-                                        icon={faMinus}
-                                        color="red"
-                                      />
-                                    </div>
-                                  )}
-                                  <div className="badge badge-primary">
-                                    {item.userQuantity}
-                                  </div>
-                                  {item.quantity - item.userQuantity != 0 && (
-                                    <div
-                                      className="btn  ml-2 btn-sm"
-                                      onClick={() => this.increaseQuntity(item)}
-                                    >
-                                      <FontAwesomeIcon
-                                        icon={faPlus}
-                                        color="green"
-                                      />
-                                    </div>
-                                  )}
                                 </div>
                               </div>
                             </div>

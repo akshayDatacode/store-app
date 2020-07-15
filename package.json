@@ -18,6 +18,7 @@
     "express": "^4.17.1",
     "express-validator": "^6.6.0",
     "mongoose": "^5.9.22",
+    "mongoose-unique-validator": "^2.0.3",
     "react": "^16.13.1",
     "react-bootstrap": "^1.1.1",
     "react-bootstrap-counter": "^1.0.1",
