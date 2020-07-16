@@ -39,8 +39,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "lint": "eslint"
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -59,8 +58,6 @@
   },
   "devDependencies": {
     "cross-env": "^7.0.2",
-    "eslint": "^7.4.0",
-    "eslint-config-standard": "^14.1.1",
     "morgan": "^1.10.0",
     "nodemon": "^2.0.4"
   }

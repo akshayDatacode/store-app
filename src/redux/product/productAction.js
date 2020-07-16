@@ -19,6 +19,7 @@ import {
   UPDATE_CART,
   DELETE_CART_PRODUCT,
   UPDATE_QUANTITY_IN_STORE,
+  SIGNUP_USER,
 } from "./type";
 
 import axios from "axios";
@@ -27,6 +28,7 @@ const add_product = "http://www.localhost:5000/api/add_product";
 const get_products = "http://www.localhost:5000/api/get_products";
 const add_cart = "http://www.localhost:5000/api/cart/add_cart";
 const get_cart = "http://www.localhost:5000/api/cart/get_cart";
+const signup_user = "http://www.localhost:5000/api/cart/signup_user";
 
 export const getProducts = () => {
   console.log("GetUsers");
@@ -259,6 +261,33 @@ export const deleteCartProduct = (id) => {
       })
       .catch((err) => {
         console.log("Aaction Get Aeeror ", err);
+        dispatch({
+          type: UPDATE_PRODUCT_FAILURE,
+          payload: {
+            ...err,
+          },
+        });
+      });
+  };
+};
+
+export const signupUser = (user) => {
+  console.log("user Info", user);
+  debugger;
+  return (dispatch) => {
+    console.log("user dispatch");
+
+    axios
+      .post(signup_user, user)
+      .then((res) => {
+        console.log("Add Status", res.data);
+        dispatch({
+          type: SIGNUP_USER,
+          payload: res.data,
+        });
+      })
+      .catch((err) => {
+        console.log("Aaction Get error ", err);
         dispatch({
           type: UPDATE_PRODUCT_FAILURE,
           payload: {

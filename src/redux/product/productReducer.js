@@ -18,6 +18,7 @@ import {
   GET_CART,
   UPDATE_CART,
   UPDATE_QUANTITY_IN_STORE,
+  SIGNUP_USER,
 } from "./type";
 
 const initialState = {
@@ -203,6 +204,11 @@ const reducer = (state = initialState, action) => {
         cartCount: action.payload.length,
       };
 
+    case SIGNUP_USER:
+      return {
+        ...state,
+        error: null,
+      };
     default:
       return state;
   }

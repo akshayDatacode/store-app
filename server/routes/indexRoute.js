@@ -1,11 +1,9 @@
 const express = require("express");
 const { check } = require("express-validator");
-const checkToken = require("../middlewares/checkToken");
+
 const indexController = require("../controllers/indexController");
 
 const router = express.Router();
-
-router.use(checkToken);
 
 router.post(
   "/add_product",

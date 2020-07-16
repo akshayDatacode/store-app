@@ -18,3 +18,4 @@ export const GET_CART = "@product/GET_CART";
 export const UPDATE_QUNTITY = "@product/UPDATE_QUNTITY";
 export const DELETE_CART_PRODUCT = "@product/DELETE_CART_PRODUCT";
 export const UPDATE_QUANTITY_IN_STORE = "@product/UPDATE_QUANTITY_IN_STORE";
+export const SIGNUP_USER = "@product/SIGNUP_USER";

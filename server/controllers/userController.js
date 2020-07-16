@@ -145,6 +145,12 @@ const login = async (req, res) => {
     email: existingUser.email,
     token: token,
   });
+
+  res.send({
+    userId: existingUser.id,
+    email: existingUser.email,
+    token: token,
+  });
 };
 
 exports.signup = signup;
