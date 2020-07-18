@@ -157,6 +157,7 @@ const mapStateToProps = (state) => {
   return {
     editProduct: state.editProduct,
     isEdit: state.isEdit,
+    error: state.error,
   };
 };
 

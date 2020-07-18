@@ -17,26 +17,39 @@ import {
   getProductsFromCart,
   updateProduct,
   getProducts,
+  handleSignup,
 } from "../redux/product/productAction";
 
 class CartComponent extends Component {
   componentDidMount() {
-    this.timer = setInterval(() => this.props.getProductsFromCart(), 500);
-    this.timer2 = setInterval(() => this.props.getProducts(), 500);
-    this.timer3 = setInterval(() => this.props.totalPrice(), 500);
+    const getDataFromLocalStorage = localStorage.getItem("userDetails");
+    const parseDataFromJSON = JSON.parse(getDataFromLocalStorage);
+    console.log("Local Storage Data", parseDataFromJSON);
+
+    if (parseDataFromJSON.token) {
+      this.props.getProductsFromCart();
+      this.props.getProducts();
+      this.props.totalPrice();
+    } else {
+      this.props.handleSignup();
+    }
+
+    // this.timer = setInterval(() => this.props.getProductsFromCart(), 500);
+    // this.timer2 = setInterval(() => this.props.getProducts(), 500);
+    // this.timer3 = setInterval(() => this.props.totalPrice(), 500);
   }
 
-  componentWillUnmount() {
-    clearTimeout(setTimeout(this.props.getProductsFromCart(), 500));
-    clearInterval(this.timer);
-    this.timer = null;
-    clearTimeout(setTimeout(this.props.getProducts(), 500));
-    clearInterval(this.timer2);
-    this.timer2 = null;
-    clearTimeout(setTimeout(this.props.getProducts(), 500));
-    clearInterval(this.timer3);
-    this.timer3 = null;
-  }
+  // componentWillUnmount() {
+  //   clearTimeout(setTimeout(this.props.getProductsFromCart(), 500));
+  //   clearInterval(this.timer);
+  //   this.timer = null;
+  //   clearTimeout(setTimeout(this.props.getProducts(), 500));
+  //   clearInterval(this.timer2);
+  //   this.timer2 = null;
+  //   clearTimeout(setTimeout(this.props.getProducts(), 500));
+  //   clearInterval(this.timer3);
+  //   this.timer3 = null;
+  // }
 
   increaseQuntity = (item) => {
     this.props.getProductsFromCart();
@@ -222,6 +235,7 @@ const mapDispatchToProps = {
   getProductsFromCart,
   updateProduct,
   getProducts,
+  handleSignup,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CartComponent);

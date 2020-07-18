@@ -62,16 +62,20 @@ class HomeComponent extends Component {
                             )}
                           </div>
                           <div className="col-3">
-                            <Link to="add_product">
-                              <div
-                                className="btn btn-warning btn-sm"
-                                onClick={() =>
-                                  this.props.handleEditProduct(item)
-                                }
-                              >
-                                Edit
-                              </div>
-                            </Link>
+                            {this.props.user ? (
+                              <Link to="add_product">
+                                <div
+                                  className="btn btn-warning btn-sm"
+                                  onClick={() =>
+                                    this.props.handleEditProduct(item)
+                                  }
+                                >
+                                  Edit
+                                </div>
+                              </Link>
+                            ) : (
+                              this.props.handleSignup
+                            )}
                           </div>
                         </div>
                       </div>

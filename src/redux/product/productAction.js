@@ -20,6 +20,13 @@ import {
   DELETE_CART_PRODUCT,
   UPDATE_QUANTITY_IN_STORE,
   SIGNUP_USER,
+  LOGIN_USER,
+  SIGNUP_MODAL,
+  SIGNUP_MODAL_CLOSE,
+  LOGIN_MODAL,
+  LOGOUT_USER,
+  ERROR,
+  RESUME_USER,
 } from "./type";
 
 import axios from "axios";
@@ -28,7 +35,6 @@ const add_product = "http://www.localhost:5000/api/add_product";
 const get_products = "http://www.localhost:5000/api/get_products";
 const add_cart = "http://www.localhost:5000/api/cart/add_cart";
 const get_cart = "http://www.localhost:5000/api/cart/get_cart";
-const signup_user = "http://www.localhost:5000/api/cart/signup_user";
 
 export const getProducts = () => {
   console.log("GetUsers");
@@ -271,6 +277,15 @@ export const deleteCartProduct = (id) => {
   };
 };
 
+export const resumeUser = (parseDataFromJSON) => {
+  return (dispatch) => {
+    dispatch({
+      type: RESUME_USER,
+      payload: parseDataFromJSON,
+    });
+  };
+};
+
 export const signupUser = (user) => {
   console.log("user Info", user);
   debugger;
@@ -278,13 +293,14 @@ export const signupUser = (user) => {
     console.log("user dispatch");
 
     axios
-      .post(signup_user, user)
+      .post(`http://www.localhost:5000/api/user/signup`, user)
       .then((res) => {
         console.log("Add Status", res.data);
         dispatch({
           type: SIGNUP_USER,
           payload: res.data,
         });
+        return { success: false };
       })
       .catch((err) => {
         console.log("Aaction Get error ", err);
@@ -295,6 +311,59 @@ export const signupUser = (user) => {
           },
         });
       });
+  };
+};
+
+export const loginUser = (user) => {
+  console.log("user Info", user);
+  debugger;
+  return (dispatch) => {
+    console.log("user dispatch");
+
+    axios
+      .post(`http://www.localhost:5000/api/user/login`, user)
+      .then((res) => {
+        console.log("Login Status", res.data);
+        dispatch({
+          type: LOGIN_USER,
+          payload: res.data,
+        });
+      })
+      .catch((err) => {
+        console.log("Aaction Get error ", err.message);
+      });
+  };
+};
+
+export const handleSignup = () => {
+  return (dispatch) => {
+    dispatch({
+      type: SIGNUP_MODAL,
+    });
+  };
+};
+
+export const handleLogin = () => {
+  return (dispatch) => {
+    dispatch({
+      type: LOGIN_MODAL,
+    });
+  };
+};
+
+export const handleClose = () => {
+  return (dispatch) => {
+    dispatch({
+      type: SIGNUP_MODAL_CLOSE,
+    });
+  };
+};
+
+export const logout = () => {
+  return (dispatch) => {
+    dispatch({
+      type: LOGOUT_USER,
+    });
   };
 };
 

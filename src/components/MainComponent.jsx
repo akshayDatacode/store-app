@@ -9,6 +9,7 @@ import {
   decreaseQuntity,
   getProductsFromCart,
   updateProduct,
+  handleSignup,
 } from "../redux/product/productAction";
 
 class MainComponent extends Component {
@@ -16,35 +17,47 @@ class MainComponent extends Component {
     error: null,
     isEdit: false,
     quantity: 0,
+    currentUser: {},
   };
 
   componentDidMount() {
-    this.timer = setInterval(() => this.props.getProductsFromCart(), 500);
-    this.timer2 = setInterval(() => this.props.getProducts(), 500);
+    const getDataFromLocalStorage = localStorage.getItem("userDetails");
+    const parseDataFromJSON = JSON.parse(getDataFromLocalStorage);
+    console.log("Local Storage Data", parseDataFromJSON);
+    this.setState({ currentUser: parseDataFromJSON });
+
+    const {
+      props: { getProductsFromCart, getProducts },
+    } = this;
+
+    getProductsFromCart();
+    getProducts();
+    // this.timer = setInterval(() => this.props.getProductsFromCart(), 500);
+    // this.timer2 = setInterval(() => this.props.getProducts(), 500);
   }
 
-  componentWillUnmount() {
-    clearTimeout(setTimeout(this.props.getProductsFromCart(), 500));
-    clearInterval(this.timer);
-    this.timer = null;
-    clearTimeout(setTimeout(this.props.getProducts(), 500));
-    clearInterval(this.timer2);
-    this.timer2 = null;
-  }
+  // componentWillUnmount() {
+  //   clearTimeout(setTimeout(this.props.getProductsFromCart(), 500));
+  //   clearInterval(this.timer);
+  //   this.timer = null;
+  //   clearTimeout(setTimeout(this.props.getProducts(), 500));
+  //   clearInterval(this.timer2);
+  //   this.timer2 = null;
+  // }
 
   increaseQuntity = (item) => {
     this.props.getProductsFromCart();
     var userQuantity = 0;
     console.log("Inside Increase Function");
     this.props.cart.forEach((element) => {
-      if (item._id == element.productId) {
-        {
-          userQuantity = element.userQuantity + 1;
+      if (item._id == element.productId && this.props.user) {
+        userQuantity = element.userQuantity + 1;
 
-          this.props.updateQuntity(element._id, { userQuantity }, item);
-          this.props.updateProduct({ userQuantity }, item._id);
-          console.log(userQuantity, element._id);
-        }
+        this.props.updateQuntity(element._id, { userQuantity }, item);
+        this.props.updateProduct({ userQuantity }, item._id);
+        console.log(userQuantity, element._id);
+      } else {
+        this.props.handleSignup();
       }
     });
   };
@@ -54,14 +67,14 @@ class MainComponent extends Component {
     var userQuantity = 0;
     console.log("Inside Increase Function");
     this.props.cart.forEach((element) => {
-      if (item._id == element.productId) {
-        {
-          userQuantity = element.userQuantity - 1;
+      if (item._id == element.productId && this.props.user) {
+        userQuantity = element.userQuantity - 1;
 
-          this.props.updateQuntity(element._id, { userQuantity }, item);
-          this.props.updateProduct({ userQuantity }, item._id);
-          console.log(userQuantity, element._id);
-        }
+        this.props.updateQuntity(element._id, { userQuantity }, item);
+        this.props.updateProduct({ userQuantity }, item._id);
+        console.log(userQuantity, element._id);
+      } else {
+        this.props.handleSignup();
       }
     });
   };
@@ -71,13 +84,23 @@ class MainComponent extends Component {
       if (this.props.isEdit) return { isEdit: false };
     });
     console.log(item);
+
     this.setState({ isEdit: true });
-    this.props.editProduct(item);
+    if (this.props.user) {
+      this.props.editProduct(item);
+    } else {
+      this.props.handleSignup();
+    }
   };
 
   handleAddToCart = async (item) => {
     console.log("get ID ", item._id);
-    this.props.addToCart(item._id);
+
+    if (this.props.user) {
+      this.props.addToCart(item._id);
+    } else {
+      this.props.handleSignup();
+    }
   };
 
   render() {
@@ -95,6 +118,8 @@ class MainComponent extends Component {
                 handleAddToCart={this.handleAddToCart}
                 increaseQuntity={this.increaseQuntity}
                 decreaseQuntity={this.decreaseQuntity}
+                user={this.props.user}
+                handleSignup={this.props.handleSignup}
               />
             </div>
           </div>
@@ -109,6 +134,7 @@ const mapStateToProps = (state) => {
     product: state.product,
     isEdit: state.isEdit,
     cart: state.cart,
+    user: state.user,
   };
 };
 const mapDispatchToProps = {
@@ -119,6 +145,7 @@ const mapDispatchToProps = {
   decreaseQuntity,
   getProductsFromCart,
   updateProduct,
+  handleSignup,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(MainComponent);

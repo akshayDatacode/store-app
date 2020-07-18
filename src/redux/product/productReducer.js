@@ -19,6 +19,13 @@ import {
   UPDATE_CART,
   UPDATE_QUANTITY_IN_STORE,
   SIGNUP_USER,
+  LOGIN_USER,
+  SIGNUP_MODAL,
+  SIGNUP_MODAL_CLOSE,
+  LOGIN_MODAL,
+  LOGOUT_USER,
+  ERROR,
+  RESUME_USER,
 } from "./type";
 
 const initialState = {
@@ -29,6 +36,10 @@ const initialState = {
   cart: [],
   cartCount: 0,
   totalPriceValue: 0,
+  show: false,
+  showlogin: false,
+  isAuthorize: false,
+  user: {},
 };
 
 const reducer = (state = initialState, action) => {
@@ -205,10 +216,62 @@ const reducer = (state = initialState, action) => {
       };
 
     case SIGNUP_USER:
+      localStorage.setItem("userDetails", JSON.stringify(action.payload));
+      console.log("user data from reducer", action.payload);
       return {
         ...state,
         error: null,
+        user: action.payload,
       };
+
+    case LOGIN_USER:
+      localStorage.setItem("userDetails", JSON.stringify(action.payload));
+      console.log("user data from reducer", action.payload);
+      return {
+        ...state,
+        error: null,
+        user: action.payload,
+      };
+
+    case LOGOUT_USER:
+      localStorage.clear();
+      return {
+        ...state,
+        user: null,
+      };
+
+    case SIGNUP_MODAL:
+      return {
+        ...state,
+        show: true,
+        showlogin: false,
+      };
+
+    case LOGIN_MODAL:
+      return {
+        ...state,
+        show: false,
+        showlogin: true,
+      };
+    case SIGNUP_MODAL_CLOSE:
+      return {
+        ...state,
+        show: false,
+        showlogin: false,
+      };
+
+    case RESUME_USER:
+      return {
+        ...state,
+        user: action.payload,
+      };
+
+    case ERROR:
+      return {
+        ...state,
+        error: action.payload,
+      };
+
     default:
       return state;
   }
