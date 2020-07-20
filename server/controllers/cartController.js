@@ -5,11 +5,12 @@ const cartModel = require("../models/cartModel");
 
 const addProductToCart = async (req, res) => {
   console.log(req.body);
-  const { productId } = req.body;
+  const { productId, userId } = req.body;
 
   const createdCart = new cartModel({
     productId,
-    userQuantity: 0,
+    userQuantity: 1,
+    userId,
   });
 
   try {
@@ -28,8 +29,9 @@ const addProductToCart = async (req, res) => {
 // getProductsFromCart=====================================================================
 
 const getProductsFromCart = async (req, res) => {
+  const userId = req.body;
   try {
-    const cart = await cartModel.find({}).sort({ createdAt: -1 });
+    const cart = await cartModel.find(userId).sort({ createdAt: -1 });
     res.send({ cart: cart, success: true });
   } catch (error) {
     console.error(error);
@@ -39,7 +41,6 @@ const getProductsFromCart = async (req, res) => {
 // editProductToCart=====================================================================
 
 const editProductToCart = async (req, res) => {
-  console.log("BAcked Se AA Rha he Med", req.body.userQuantity, req.params);
   const { id } = req.params;
   const data = req.body;
   try {
@@ -54,8 +55,6 @@ const editProductToCart = async (req, res) => {
 // DeleteProductToCart=====================================================================
 
 const deleteProductToCart = async (req, res) => {
-  console.log("DELETE WALA", req.params);
-
   try {
     await cartModel.deleteOne({ productId: req.params.id });
     res.send({ success: true });
