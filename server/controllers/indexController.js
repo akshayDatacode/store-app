@@ -22,7 +22,7 @@ const addProduct = async (req, res, next) => {
     price,
     quantity,
     discount,
-    userQuantity: 0,
+    userQuantity: 1,
   });
 
   try {

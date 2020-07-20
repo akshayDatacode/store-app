@@ -104,15 +104,16 @@ export const updateProduct = (product, id) => {
 
 // Cart Actions
 
-export const addToCart = (productId) => {
+export const addToCart = (productId, userId) => {
   return (dispatch) => {
-    axios
-      .post(`${api}cart/add_cart`, { productId })
+    return axios
+      .post(`${api}cart/add_cart`, { productId, userId })
       .then((res) => {
         dispatch({
           type: ADD_TO_CART,
           payload: res.data,
         });
+        return { success: true };
       })
       .catch((err) => {
         dispatch({
@@ -121,14 +122,15 @@ export const addToCart = (productId) => {
             ...err,
           },
         });
+        return { success: false };
       });
   };
 };
 
-export const getProductsFromCart = () => {
+export const getProductsFromCart = (userId) => {
   return (dispatch) => {
     axios
-      .get(`${api}cart/get_cart`)
+      .get(`${api}cart/get_cart`, { userId })
       .then((res) => {
         const cart = res.data.cart;
 

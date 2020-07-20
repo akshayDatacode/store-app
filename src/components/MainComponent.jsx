@@ -15,12 +15,18 @@ class MainComponent extends Component {
   state = {
     error: null,
     isEdit: false,
+    currentUser: {},
   };
 
   componentDidMount() {
     const {
       props: { getProductsFromCart, getProducts },
     } = this;
+
+    const getDataFromLocalStorage = localStorage.getItem("userDetails");
+    const parseDataFromJSON = JSON.parse(getDataFromLocalStorage);
+    console.log("Local Storage Data", parseDataFromJSON);
+    this.setState({ currentUser: parseDataFromJSON });
 
     getProductsFromCart();
 
@@ -121,10 +127,21 @@ class MainComponent extends Component {
 
   handleAddToCart = async (item) => {
     const {
-      props: { user, addToCart, handleSignup },
+      props: {
+        user,
+        addToCart,
+        handleSignup,
+        getProductsFromCart,
+        getProducts,
+      },
     } = this;
     if (user) {
-      addToCart(item._id);
+      addToCart(item._id, this.state.currentUser.userId).then((res) => {
+        if (res.success) {
+          getProductsFromCart();
+          getProducts();
+        }
+      });
     } else {
       handleSignup();
     }
