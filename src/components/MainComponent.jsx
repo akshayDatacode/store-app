@@ -121,10 +121,14 @@ class MainComponent extends Component {
 
   handleAddToCart = async (item) => {
     const {
-      props: { user, addToCart, handleSignup },
+      props: { user, addToCart, handleSignup, getProductsFromCart },
     } = this;
     if (user) {
-      addToCart(item._id);
+      addToCart(item._id).then((res) => {
+        if (res.success) {
+          getProductsFromCart();
+        }
+      });
     } else {
       handleSignup();
     }

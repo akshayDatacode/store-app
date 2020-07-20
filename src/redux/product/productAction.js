@@ -106,13 +106,14 @@ export const updateProduct = (product, id) => {
 
 export const addToCart = (productId) => {
   return (dispatch) => {
-    axios
+    return axios
       .post(`${api}cart/add_cart`, { productId })
       .then((res) => {
         dispatch({
           type: ADD_TO_CART,
           payload: res.data,
         });
+        return { success: true };
       })
       .catch((err) => {
         dispatch({
@@ -121,6 +122,7 @@ export const addToCart = (productId) => {
             ...err,
           },
         });
+        return { success: false };
       });
   };
 };
