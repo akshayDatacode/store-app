@@ -1,5 +1,6 @@
-// import productReducer from './productReducer';
-// export * from "./productAction"
-// export * from "./productOperation"
+// import productReducer from "./productReducer";
 
-// export default reducer;
+// export * from "./productAction";
+// export * from "./productOperation";
+
+// export default productReducer;

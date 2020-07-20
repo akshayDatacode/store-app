@@ -1,54 +1,67 @@
 import React, { Component } from "react";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faPlus,
-  faMinus,
-  faCross,
-  faCrosshairs,
-  faStar,
-} from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faMinus } from "@fortawesome/free-solid-svg-icons";
 import { connect } from "react-redux";
 import {
   totalPrice,
   updateQuntity,
-  decreaseQuntity,
   deleteCartProduct,
   getProductsFromCart,
   updateProduct,
   getProducts,
+  handleSignup,
 } from "../redux/product/productAction";
 
 class CartComponent extends Component {
   componentDidMount() {
-    this.timer = setInterval(() => this.props.getProductsFromCart(), 500);
-    this.timer2 = setInterval(() => this.props.getProducts(), 500);
-    this.timer3 = setInterval(() => this.props.totalPrice(), 500);
-  }
+    const {
+      props: {
+        user,
+        getProducts,
+        getProductsFromCart,
+        totalPrice,
+        handleSignup,
+      },
+    } = this;
 
-  componentWillUnmount() {
-    clearTimeout(setTimeout(this.props.getProductsFromCart(), 500));
-    clearInterval(this.timer);
-    this.timer = null;
-    clearTimeout(setTimeout(this.props.getProducts(), 500));
-    clearInterval(this.timer2);
-    this.timer2 = null;
-    clearTimeout(setTimeout(this.props.getProducts(), 500));
-    clearInterval(this.timer3);
-    this.timer3 = null;
+    if (user != null) {
+      getProductsFromCart();
+      getProducts();
+      totalPrice();
+    } else {
+      handleSignup();
+    }
   }
 
   increaseQuntity = (item) => {
-    this.props.getProductsFromCart();
+    const {
+      props: {
+        cart,
+        updateProduct,
+        updateQuntity,
+        getProducts,
+        getProductsFromCart,
+      },
+    } = this;
+
     var userQuantity = 0;
-    console.log("Inside Increase Function");
-    this.props.cart.forEach((element) => {
+    cart.forEach((element) => {
       if (item._id == element.productId) {
         {
           userQuantity = element.userQuantity + 1;
 
-          this.props.updateQuntity(element._id, { userQuantity }, item);
-          this.props.updateProduct({ userQuantity }, item._id);
+          updateQuntity(element._id, { userQuantity }, item).then((res) => {
+            if (res.success) {
+              getProducts();
+            }
+          });
+
+          updateProduct({ userQuantity }, item._id).then((res) => {
+            if (res.success) {
+              getProductsFromCart();
+            }
+          });
           console.log(userQuantity, element._id);
         }
       }
@@ -56,16 +69,33 @@ class CartComponent extends Component {
   };
 
   decreaseQuntity = (item) => {
-    this.props.getProductsFromCart();
+    const {
+      props: {
+        cart,
+        updateProduct,
+        updateQuntity,
+        getProducts,
+        getProductsFromCart,
+      },
+    } = this;
+
     var userQuantity = 0;
-    console.log("Inside Increase Function");
-    this.props.cart.forEach((element) => {
+    cart.find((element) => {
       if (item._id == element.productId) {
         {
           userQuantity = element.userQuantity - 1;
 
-          this.props.updateQuntity(element._id, { userQuantity }, item);
-          this.props.updateProduct({ userQuantity }, item._id);
+          updateQuntity(element._id, { userQuantity }, item).then((res) => {
+            if (res.success) {
+              getProducts();
+            }
+          });
+
+          updateProduct({ userQuantity }, item._id).then((res) => {
+            if (res.success) {
+              getProductsFromCart();
+            }
+          });
           console.log(userQuantity, element._id);
         }
       }
@@ -73,17 +103,29 @@ class CartComponent extends Component {
   };
 
   deleteCartProduct = (item) => {
-    this.props.getProductsFromCart();
+    const {
+      props: {
+        cart,
+        updateProduct,
+        updateQuntity,
+        deleteCartProduct,
+        getProductsFromCart,
+      },
+    } = this;
+
     var userQuantity = 0;
-    console.log("Inside Increase Function");
-    this.props.cart.forEach((element) => {
+    cart.find((element) => {
       if (item._id == element.productId) {
         {
           userQuantity = 0;
 
-          this.props.updateQuntity(element._id, { userQuantity }, item);
-          this.props.updateProduct({ userQuantity }, item._id);
-          this.props.deleteCartProduct(item._id);
+          updateQuntity(element._id, { userQuantity }, item);
+          updateProduct({ userQuantity }, item._id);
+          deleteCartProduct(item._id).then((res) => {
+            if (res.success) {
+              getProductsFromCart();
+            }
+          });
           console.log(userQuantity, element._id);
         }
       }
@@ -112,19 +154,16 @@ class CartComponent extends Component {
                           </div>
                           <div className="col-6 text-right">
                             <button
-                              className="btn btn-default"
+                              className="btn btn-danger"
                               onClick={() => this.deleteCartProduct(item)}
                             >
-                              <h6 className="text-danger">
-                                <b>X</b>
-                              </h6>
+                              Delete
                             </button>
                           </div>
                         </div>
 
                         <h6 className="text-back"> Price :{item.price} /-</h6>
 
-                        <p>Quantity : {item.quantity - item.userQuantity}</p>
                         <b className="text-secondary">
                           Discount : {item.discount} %
                         </b>
@@ -212,16 +251,17 @@ const mapStateToProps = (state) => {
     cart: state.cart,
     totalPriceValue: state.totalPriceValue,
     product: state.product,
+    user: state.user,
   };
 };
 const mapDispatchToProps = {
   totalPrice,
   updateQuntity,
-  decreaseQuntity,
   deleteCartProduct,
   getProductsFromCart,
   updateProduct,
   getProducts,
+  handleSignup,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CartComponent);

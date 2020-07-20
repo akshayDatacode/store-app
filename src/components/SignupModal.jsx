@@ -1,11 +1,15 @@
 import React, { Component } from "react";
 import { Modal } from "react-bootstrap";
 import { connect } from "react-redux";
-import { signupUser } from "../redux/product/productAction";
+import {
+  signupUser,
+  handleClose,
+  handleLogin,
+} from "../redux/product/productAction";
 
 class SignupModal extends Component {
   state = {
-    username: "",
+    userName: "",
     email: "",
     password: "",
   };
@@ -14,14 +18,14 @@ class SignupModal extends Component {
     event.preventDefault();
 
     const user = {
-      username: this.state.username,
+      userName: this.state.userName,
       email: this.state.email,
       password: this.state.password,
     };
-    console.log(user);
+
     this.props.signupUser(user);
 
-    this.setState({ username: "", email: "", password: "" });
+    this.setState({ userName: "", email: "", password: "" });
   };
 
   handleInputChange = (event) => {
@@ -32,22 +36,26 @@ class SignupModal extends Component {
   };
 
   render() {
+    const {
+      handleSubmit,
+      handleInputChange,
+      props: { show, handleClose, handleLogin, error },
+    } = this;
     return (
       <>
-        <Modal show={this.props.show} size="lg" onHide={this.props.handleClose}>
-          <Modal.Header closeButton></Modal.Header>
+        <Modal show={show} size="lg" onHide={handleClose}>
+          <Modal.Header closeButton>Signup</Modal.Header>
           <Modal.Body className="text-center">
             <form>
               <div className="form-group row">
                 <label for="inputEmail3" className="col-sm-2 col-form-label">
-                  Username
+                  User Name
                 </label>
                 <div className="col-sm-10">
                   <input
                     className="form-control"
-                    placeholder="Sender Name"
-                    value={this.state.username}
-                    name="username"
+                    value={this.state.userName}
+                    name="userName"
                     onChange={this.handleInputChange}
                   />
                 </div>
@@ -59,10 +67,9 @@ class SignupModal extends Component {
                 <div className="col-sm-10">
                   <input
                     className="form-control"
-                    placeholder="Sender Name"
                     value={this.state.email}
                     name="email"
-                    onChange={this.handleInputChange}
+                    onChange={handleInputChange}
                   />
                 </div>
               </div>
@@ -73,22 +80,29 @@ class SignupModal extends Component {
                 <div className="col-sm-10">
                   <input
                     className="form-control"
-                    placeholder="Sender Name"
                     value={this.state.password}
                     name="password"
-                    onChange={this.handleInputChange}
+                    onChange={handleInputChange}
                   />
                 </div>
               </div>
 
               <div className="form-group row">
                 <div className="col-sm-10">
-                  <div onClick={this.handleSubmit}>
-                    <div className="btn btn-primary ">Add Product</div>
+                  <div onClick={handleSubmit}>
+                    <div className="btn btn-primary ">Signup</div>
                   </div>
                 </div>
               </div>
-              <p onClick={this.props.handleLogin}>Already Sugnup : Login</p>
+              <p>
+                Already have account
+                <snap onClick={handleLogin} className=" btn text-success">
+                  Login
+                </snap>{" "}
+                from here!
+              </p>
+
+              {error && <p>{error.message}</p>}
             </form>
           </Modal.Body>
         </Modal>
@@ -97,8 +111,16 @@ class SignupModal extends Component {
   }
 }
 
-const mapDispatchToProps = {
-  signupUser,
+const mapStateToProps = (state) => {
+  return {
+    error: state.error,
+  };
 };
 
-export default connect(null, mapDispatchToProps)(SignupModal);
+const mapDispatchToProps = {
+  signupUser,
+  handleClose,
+  handleLogin,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(SignupModal);

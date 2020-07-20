@@ -15,8 +15,10 @@ const signup = async (req, res, next) => {
       new HttpResponse("Invalid inputs passed, please check your data.", 422)
     );
   }
-  console.log(req.body);
-  const { userName, email, password } = req.body;
+  console.log("signup api call", req.body);
+  const {
+    body: { userName, email, password },
+  } = req;
 
   // checking if user already exists
   let existingUser;
@@ -27,7 +29,7 @@ const signup = async (req, res, next) => {
       "Signing up failed, Something went wrong while checking existing user",
       500
     );
-    return res.status(500).json({ response: error });
+    return res.send(error);
   }
   if (existingUser) {
     const error = new HttpResponse(
@@ -60,13 +62,12 @@ const signup = async (req, res, next) => {
     const error = new HttpResponse(err, 500);
     return res.status(500).json({ response: error });
   }
-
   //generating JWT TOKEN- DO NOT TOUCH
   let token;
   try {
     token = jwt.sign(
       { userId: createdUser.id, email: createdUser.email },
-      "thisIs th typ titan private key",
+      "This is store-app Prive Key",
       { expiresIn: "1h" }
     );
   } catch (err) {
@@ -78,6 +79,11 @@ const signup = async (req, res, next) => {
   }
 
   res.status(201).json({
+    userId: createdUser.id,
+    email: createdUser.email,
+    token: token,
+  });
+  res.send({
     userId: createdUser.id,
     email: createdUser.email,
     token: token,
@@ -107,7 +113,7 @@ const login = async (req, res) => {
       "Invalid credentials, could not log you in.",
       401
     );
-    return res.status(500).json({ response: error });
+    return res.status(401).json({ response: error });
   }
   let isValidPassword;
   try {
@@ -130,7 +136,7 @@ const login = async (req, res) => {
   try {
     token = jwt.sign(
       { userId: existingUser.id, email: existingUser.email },
-      "thisIs th typ titan private key",
+      "This is Store app Private  Key Word",
       { expiresIn: "1h" }
     );
   } catch (err) {

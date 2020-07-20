@@ -1,9 +1,13 @@
 import React, { Component } from "react";
 import { Modal } from "react-bootstrap";
-// import { connect } from "react-redux";
-// import { signupUser } from "../redux/product/productAction";
+import { connect } from "react-redux";
+import {
+  loginUser,
+  handleClose,
+  handleSignup,
+} from "../redux/product/productAction";
 
-class loginModal extends Component {
+class LoginModal extends Component {
   state = {
     email: "",
     password: "",
@@ -11,15 +15,15 @@ class loginModal extends Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-
+    const {
+      props: { loginUser },
+    } = this;
     const user = {
       email: this.state.email,
       password: this.state.password,
     };
-    console.log(user);
-    //  this.props.signupUser(user);
 
-    this.setState({ email: "", password: "" });
+    loginUser(user);
   };
 
   handleInputChange = (event) => {
@@ -30,14 +34,15 @@ class loginModal extends Component {
   };
 
   render() {
+    const {
+      handleSubmit,
+      handleInputChange,
+      props: { show, handleClose, handleSignup },
+    } = this;
     return (
       <>
-        <Modal
-          show={this.props.showLogin}
-          size="lg"
-          onHide={this.props.handleClose}
-        >
-          <Modal.Header closeButton></Modal.Header>
+        <Modal show={show} size="lg" onHide={handleClose}>
+          <Modal.Header closeButton>Login</Modal.Header>
           <Modal.Body className="text-center">
             <form>
               <div className="form-group row">
@@ -47,10 +52,9 @@ class loginModal extends Component {
                 <div className="col-sm-10">
                   <input
                     className="form-control"
-                    placeholder="Sender Name"
                     value={this.state.email}
                     name="email"
-                    onChange={this.handleInputChange}
+                    onChange={handleInputChange}
                   />
                 </div>
               </div>
@@ -61,21 +65,27 @@ class loginModal extends Component {
                 <div className="col-sm-10">
                   <input
                     className="form-control"
-                    placeholder="Sender Name"
                     value={this.state.password}
                     name="password"
-                    onChange={this.handleInputChange}
+                    onChange={handleInputChange}
                   />
                 </div>
               </div>
 
               <div className="form-group row">
                 <div className="col-sm-10">
-                  <div onClick={this.handleSubmit}>
-                    <div className="btn btn-primary ">Add Product</div>
+                  <div onClick={handleSubmit}>
+                    <div className="btn btn-primary ">Login</div>
                   </div>
                 </div>
               </div>
+              <p>
+                Don't have account ?
+                <snap onClick={handleSignup} className=" btn text-success">
+                  Signup
+                </snap>
+                from here!
+              </p>
             </form>
           </Modal.Body>
         </Modal>
@@ -84,4 +94,15 @@ class loginModal extends Component {
   }
 }
 
-export default loginModal;
+const mapDispatchToProps = {
+  loginUser,
+  handleClose,
+  handleSignup,
+};
+
+const mapStateToProps = (state) => {
+  return {
+    error: state.error,
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(LoginModal);

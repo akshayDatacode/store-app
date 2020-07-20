@@ -5,6 +5,18 @@ import { faPlus, faMinus, faCartPlus } from "@fortawesome/free-solid-svg-icons";
 
 class HomeComponent extends Component {
   render() {
+    const {
+      props: {
+        product,
+        handleAddToCart,
+        handleEditProduct,
+        handleSignup,
+        increaseQuntity,
+        decreaseQuntity,
+        user,
+      },
+    } = this;
+
     return (
       <>
         <div className="container">
@@ -12,7 +24,7 @@ class HomeComponent extends Component {
           <div className="row">
             <div className="col">
               <div className="row">
-                {this.props.products.map((item) => (
+                {product.map((item) => (
                   <div className="col-md-4 card-deck ">
                     <div className="card mb-3 shadow-lg border border-secondary">
                       <div className="card-body">
@@ -20,7 +32,7 @@ class HomeComponent extends Component {
                           <b>{item.title}</b>
                         </h4>
                         <h6>Price : {item.price} /-</h6>
-                        <p>Quantity : {item.quantity - item.userQuantity}</p>
+                        {/* <p>Quantity : {item.quantity - item.userQuantity}</p> */}
                         <b className="text-success">
                           Discount : {item.discount} %
                         </b>
@@ -30,7 +42,7 @@ class HomeComponent extends Component {
                           <div className="col-3">
                             <div
                               className="btn btn-secondary mr-2 btn-sm"
-                              onClick={() => this.props.handleAddToCart(item)}
+                              onClick={() => handleAddToCart(item)}
                             >
                               <FontAwesomeIcon
                                 icon={faCartPlus}
@@ -44,7 +56,7 @@ class HomeComponent extends Component {
                             {item.userQuantity > 0 && (
                               <div
                                 className="btn  mr-2 btn-sm"
-                                onClick={() => this.props.decreaseQuntity(item)}
+                                onClick={() => decreaseQuntity(item)}
                               >
                                 <FontAwesomeIcon icon={faMinus} color="red" />
                               </div>
@@ -55,23 +67,25 @@ class HomeComponent extends Component {
                             {item.quantity - item.userQuantity != 0 && (
                               <div
                                 className="btn  ml-2 btn-sm"
-                                onClick={() => this.props.increaseQuntity(item)}
+                                onClick={() => increaseQuntity(item)}
                               >
                                 <FontAwesomeIcon icon={faPlus} color="green" />
                               </div>
                             )}
                           </div>
                           <div className="col-3">
-                            <Link to="add_product">
-                              <div
-                                className="btn btn-warning btn-sm"
-                                onClick={() =>
-                                  this.props.handleEditProduct(item)
-                                }
-                              >
-                                Edit
-                              </div>
-                            </Link>
+                            {user ? (
+                              <Link to="add_product">
+                                <div
+                                  className="btn btn-warning btn-sm"
+                                  onClick={() => handleEditProduct(item)}
+                                >
+                                  Edit
+                                </div>
+                              </Link>
+                            ) : (
+                              handleSignup
+                            )}
                           </div>
                         </div>
                       </div>

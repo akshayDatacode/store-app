@@ -26,7 +26,8 @@ const addProduct = async (req, res, next) => {
   });
 
   try {
-    await createdProduct.save();
+    const addProduct = await createdProduct.save();
+    res.send({ addProduct: addProduct, success: true });
   } catch (err) {
     console.log(err);
     const error = new HttpResponse(err, 500);
@@ -58,8 +59,8 @@ const editProduct = async (req, res) => {
   const { id } = req.params;
   const data = req.body;
   try {
-    await productModel.findByIdAndUpdate(id, data);
-    res.send({ success: true });
+    const updatedProduct = await productModel.findByIdAndUpdate(id, data);
+    res.send({ success: "ture", updatedProduct: updatedProduct });
   } catch (error) {
     console.error(error);
     res.send({ success: false });

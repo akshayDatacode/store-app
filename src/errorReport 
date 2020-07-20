@@ -1,0 +1,16 @@
+Store-App Code Errors to solve : ---
+
+1. Refesh the Page to get the Data 
+2. Login / Signup auth with token and also Wrrk after refresh the page
+3. Add product page showing notifiers without success API
+4. Remove all the Console.log() to clean the Code
+5. Use Object Distraction
+6. Use proper Function and Variable names
+7. Use of hooks when needed in function component
+8. Remove the polling of get api in .5 sec.
+9. Sturture the code in react and radux
+10. Use Find at place of ForEach if you want to find product by id 
+11. Relpace X  with Delete Button.
+12. Learn how to use the return from any api hen we ae calling it in .then()
+13. Change the header Design.
+14. use single Variable for api url

@@ -5,7 +5,7 @@ import {
   faCartPlus,
   faAlignRight,
   faStore,
-  faDoorOpen,
+  faDoorClosed,
 } from "@fortawesome/free-solid-svg-icons";
 import { connect } from "react-redux";
 
@@ -15,47 +15,53 @@ import {
   priceHighToLowFilter,
   priceLowToHighFilter,
   getProductsFromCart,
+  handleSignup,
+  handleLogin,
+  logout,
+  resumeUser,
 } from "../redux/product/productAction";
 
-import { Dropdown } from "react-bootstrap";
+import { Dropdown, Navbar, Nav } from "react-bootstrap";
 
 import SignupModal from "./SignupModal";
 import LoginModal from "./LoginModal";
 
 class HeaderComponent extends Component {
-  state = {
-    show: false,
-    showLogin: false,
-  };
-
-  handleSignup = () => {
-    this.setState({ show: true, showLogin: false });
-  };
-
-  handleLogin = () => {
-    this.setState({ showLogin: true, show: false });
-  };
-
-  handleClose = () => {
-    this.setState({ show: false });
-  };
-
-  handleShow = () => {
-    this.setState({ show: true });
-  };
-
-  handleShowLogin = () => {
-    this.setState({ showLogin: true });
-  };
+  componentDidMount() {
+    const getDataFromLocalStorage = localStorage.getItem("userDetails");
+    const parseDataFromJSON = JSON.parse(getDataFromLocalStorage);
+    console.log("Local Storage Data", parseDataFromJSON);
+    this.setState({ currentUser: parseDataFromJSON });
+    this.props.resumeUser(parseDataFromJSON);
+  }
 
   render() {
+    const {
+      props: {
+        getProductsFromCart,
+        user,
+        ascendingFilter,
+        priceHighToLowFilter,
+        priceLowToHighFilter,
+        descendingFilter,
+        logout,
+        cartCount,
+        handleSignup,
+        show,
+        showlogin,
+        product,
+      },
+    } = this;
+
     return (
       <>
-        <nav class="navbar navbar-light bg-secondary">
-          <Link class="navbar-brand" to="/">
-            <h3
+        <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+          <Navbar.Brand>
+            <Link
+              class="navbar-brand"
+              to="/"
               className="text-warning"
-              onClick={this.props.getProductsFromCart()}
+              onClick={getProductsFromCart}
             >
               <FontAwesomeIcon
                 icon={faStore}
@@ -63,74 +69,92 @@ class HeaderComponent extends Component {
                 className="mr-1 text-white"
               />
               Store
-            </h3>
-          </Link>
-          <Link to="/add_product">
-            <div className="btn btn-outline-warning my-2 my-sm-0 ">
-              Add Product
-            </div>
-          </Link>
+            </Link>
+          </Navbar.Brand>
+          <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+          <Navbar.Collapse id="responsive-navbar-nav">
+            {user && (
+              <Nav className="mr-5 text-left">
+                <Nav.Link>
+                  <Link to="/add_product">
+                    <div className="btn btn-outline-warning my-2 my-sm-0 ">
+                      Add Product
+                    </div>
+                  </Link>
+                </Nav.Link>
+                {product.length > 2 && (
+                  <Nav.Link>
+                    <Dropdown>
+                      <Dropdown.Toggle variant="warning" id="dropdown-basic">
+                        <FontAwesomeIcon icon={faAlignRight} className="mr-2" />
+                        Filter
+                      </Dropdown.Toggle>
 
-          <Dropdown>
-            <Dropdown.Toggle variant="warning" id="dropdown-basic">
-              <FontAwesomeIcon icon={faAlignRight} className="mr-2" />
-              Filter
-            </Dropdown.Toggle>
+                      <Dropdown.Menu>
+                        <Dropdown.Item onClick={priceLowToHighFilter}>
+                          Price Low
+                        </Dropdown.Item>
+                        <Dropdown.Item onClick={priceHighToLowFilter}>
+                          Price High
+                        </Dropdown.Item>
+                        <Dropdown.Item onClick={ascendingFilter}>
+                          A - Z
+                        </Dropdown.Item>
+                        <Dropdown.Item onClick={descendingFilter}>
+                          Z - A
+                        </Dropdown.Item>
+                      </Dropdown.Menu>
+                    </Dropdown>
+                  </Nav.Link>
+                )}
+              </Nav>
+            )}
+            {/* Right Side Section */}
+            <Nav className="ml-auto text-right">
+              {user ? (
+                <>
+                  <Nav.Link>
+                    <Link to="/cart" onClick={getProductsFromCart}>
+                      <div className="btn btn-outline-warning my-2 my-sm-0 pb-0">
+                        <h4 className="text-white">
+                          <FontAwesomeIcon
+                            icon={faCartPlus}
+                            color="orange"
+                            className="mr-2"
+                            size="1x"
+                          />
+                          {cartCount}
+                        </h4>
+                      </div>
+                    </Link>
+                  </Nav.Link>
 
-            <Dropdown.Menu>
-              <Dropdown.Item onClick={this.props.priceLowToHighFilter}>
-                Price Low
-              </Dropdown.Item>
-              <Dropdown.Item onClick={this.props.priceHighToLowFilter}>
-                Price High
-              </Dropdown.Item>
-              <Dropdown.Item onClick={this.props.ascendingFilter}>
-                A - Z
-              </Dropdown.Item>
-              <Dropdown.Item onClick={this.props.descendingFilter}>
-                Z - A
-              </Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
-
-          <div
-            className="btn btn-outline-light my-2 my-sm-0 pb-0"
-            onClick={this.handleSignup}
-          >
-            <h4 className="text-dark">Signup</h4>
-          </div>
-          <div
-            className="btn btn-outline-light  pb-0"
-            onClick={this.handleLogin}
-          >
-            <h4 className="text-dark">login</h4>
-          </div>
-
-          <SignupModal
-            handleShow={this.handleShow}
-            handleClose={this.handleClose}
-            show={this.state.show}
-          />
-
-          <LoginModal
-            handleShowLogin={this.handleShowLogin}
-            handleClose={this.handleClose}
-            showLogin={this.state.show}
-          />
-          <Link to="/cart" onClick={this.props.getProductsFromCart}>
-            <div className="btn btn-outline-light my-2 my-sm-0 pb-0">
-              <h4 className="text-dark">
-                <FontAwesomeIcon
-                  icon={faCartPlus}
-                  color="orange"
-                  className="mr-2"
-                  size="1x"
-                />
-                {this.props.cartCount}
-              </h4>
-            </div>
-          </Link>
-        </nav>
+                  <Nav.Link>
+                    <div className="btn my-2 my-sm-0 pb-0" onClick={logout}>
+                      <h6 className="text-light">
+                        <FontAwesomeIcon
+                          icon={faDoorClosed}
+                          color="orange"
+                          className="mr-2"
+                          size="1x"
+                        />
+                        LogOut
+                      </h6>
+                    </div>
+                  </Nav.Link>
+                </>
+              ) : (
+                <Nav.Link>
+                  <div className="btn my-2 my-sm-0 pb-0" onClick={handleSignup}>
+                    <h6 className="text-light">Signup / Login</h6>
+                  </div>
+                  <SignupModal show={show} />
+                  <LoginModal show={showlogin} />
+                </Nav.Link>
+              )}
+            </Nav>
+          </Navbar.Collapse>
+        </Navbar>
       </>
     );
   }
@@ -138,6 +162,11 @@ class HeaderComponent extends Component {
 const mapStateToProps = (state) => {
   return {
     cartCount: state.cartCount,
+    show: state.show,
+    showlogin: state.showlogin,
+    isAuthorize: state.isAuthorize,
+    user: state.user,
+    product: state.product,
   };
 };
 
@@ -147,6 +176,10 @@ const mapDispatchToProps = {
   priceHighToLowFilter,
   priceLowToHighFilter,
   getProductsFromCart,
+  handleSignup,
+  handleLogin,
+  logout,
+  resumeUser,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(HeaderComponent);
