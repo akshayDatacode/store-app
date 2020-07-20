@@ -36,7 +36,7 @@ const signup = async (req, res, next) => {
       "User exists already, please login instead.",
       422
     );
-    return res.send(error);
+    return res.status(422).json({ response: error });
   }
 
   //creating a hashed password and saving the user into mongo.
@@ -60,7 +60,7 @@ const signup = async (req, res, next) => {
   } catch (err) {
     console.log(err);
     const error = new HttpResponse(err, 500);
-    return res.send(error);
+    return res.status(500).json({ response: error });
   }
   //generating JWT TOKEN- DO NOT TOUCH
   let token;
@@ -75,7 +75,7 @@ const signup = async (req, res, next) => {
       "Token generation failed, Login not done",
       500
     );
-    return res.send(error);
+    return res.status(500).json({ response: error });
   }
 
   res.status(201).json({
@@ -106,14 +106,14 @@ const login = async (req, res) => {
       "Something went wrong while checking user email",
       500
     );
-    return res.send(error);
+    return res.status(500).json({ response: error });
   }
   if (!existingUser) {
     const error = new HttpResponse(
       "Invalid credentials, could not log you in.",
       401
     );
-    return res.send(error);
+    return res.status(401).json({ response: error });
   }
   let isValidPassword;
   try {
@@ -123,12 +123,12 @@ const login = async (req, res) => {
       "Something went wrong while comparing passwords",
       500
     );
-    return res.send(error);
+    return res.status(500).json({ response: error });
   }
 
   if (!isValidPassword) {
     const error = new HttpResponse("Wrong password entered", 401);
-    return res.send(error);
+    return res.status(401).json({ response: error });
   }
 
   //generating JWT TOKEN- DO NOT TOUCH

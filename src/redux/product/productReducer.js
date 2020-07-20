@@ -44,10 +44,6 @@ const initialState = {
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case ADD_PRODUCT_STARTED:
-      return {
-        ...state,
-      };
     case ADD_PRODUCT_SUCCESS:
       return {
         ...state,
@@ -68,6 +64,7 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         product: action.payload,
+        error: null,
       };
     case EDIT_PRODUCT:
       console.log(action.payload);
@@ -75,12 +72,14 @@ const reducer = (state = initialState, action) => {
         ...state,
         editProduct: action.payload,
         isEdit: true,
+        error: null,
       };
 
     case UPDATE_PRODUCT:
       return {
         ...state,
         isEdit: false,
+        error: null,
       };
     case UPDATE_PRODUCT_FAILURE:
       return {
@@ -88,9 +87,12 @@ const reducer = (state = initialState, action) => {
         error: action.payload.error,
       };
     case ADD_TO_CART:
+      const cart = [...state.cart];
+      const cartCount = cart.length + 1;
       return {
         ...state,
         error: null,
+        cartCount: cartCount,
       };
 
     case ASCENDING_FILTER:
@@ -132,12 +134,10 @@ const reducer = (state = initialState, action) => {
     case TOTAL_PRICE:
       const cartRefTotal = [...state.cart];
       const productTotalRef = [...state.product];
-      console.log("In Side Reducer");
       var totalPrice = 0;
       cartRefTotal.map((e) => {
         productTotalRef.forEach((item) => {
           if (item._id === e.productId) {
-            console.log("Inside a IF of TOtal");
             totalPrice =
               totalPrice +
               item.userQuantity * (item.price * (1 - item.discount / 100));
@@ -153,16 +153,13 @@ const reducer = (state = initialState, action) => {
 
     case INCREASE_QUNTITY:
       const productQuantityRef = [...state.product];
-      const cartRef = [...state.cart];
       productQuantityRef.push(
         productQuantityRef.filter((item) => {
-          if (item._id == action.payload._id) {
+          if (item._id == action.payload.item._id) {
             if (item.quantity > 0) {
-              cartRef.map((e) => {
-                if (item._id == e.productId) {
-                  item.quantity = item.quantity - e.userQuantity;
-                }
-              });
+              item.quantity =
+                item.quantity - action.payload.userQuantity.userQuantity;
+              item.userQuantity = action.payload.userQuantity.userQuantity;
             }
           }
         })
@@ -217,7 +214,6 @@ const reducer = (state = initialState, action) => {
 
     case SIGNUP_USER:
       localStorage.setItem("userDetails", JSON.stringify(action.payload));
-      console.log("user data from reducer", action.payload);
       return {
         ...state,
         error: null,
@@ -226,7 +222,6 @@ const reducer = (state = initialState, action) => {
 
     case LOGIN_USER:
       localStorage.setItem("userDetails", JSON.stringify(action.payload));
-      console.log("user data from reducer", action.payload);
       return {
         ...state,
         error: null,

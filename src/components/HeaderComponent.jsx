@@ -21,24 +21,12 @@ import {
   resumeUser,
 } from "../redux/product/productAction";
 
-import { Dropdown, Navbar, Nav, NavDropdown } from "react-bootstrap";
+import { Dropdown, Navbar, Nav } from "react-bootstrap";
 
 import SignupModal from "./SignupModal";
 import LoginModal from "./LoginModal";
 
 class HeaderComponent extends Component {
-  state = {
-    show: false,
-    currentUser: {},
-  };
-
-  // componentDidMount() {
-  //   const getDataFromLocalStorage = localStorage.getItem("userDetails");
-  //   const parseDataFromJSON = JSON.parse(getDataFromLocalStorage);
-  //   console.log("Local Storage Data", parseDataFromJSON);
-  //   this.setState({ currentUser: parseDataFromJSON });
-  // }
-
   componentDidMount() {
     const getDataFromLocalStorage = localStorage.getItem("userDetails");
     const parseDataFromJSON = JSON.parse(getDataFromLocalStorage);
@@ -47,19 +35,24 @@ class HeaderComponent extends Component {
     this.props.resumeUser(parseDataFromJSON);
   }
 
-  handleLogin = () => {
-    this.setState({ show: true });
-  };
-
-  handleClose = () => {
-    this.setState({ show: false });
-  };
-
-  logout = () => {
-    const logout = {};
-    localStorage.setItem("userDetails", JSON.stringify(logout));
-  };
   render() {
+    const {
+      props: {
+        getProductsFromCart,
+        user,
+        ascendingFilter,
+        priceHighToLowFilter,
+        priceLowToHighFilter,
+        descendingFilter,
+        logout,
+        cartCount,
+        handleSignup,
+        show,
+        showlogin,
+        product,
+      },
+    } = this;
+
     return (
       <>
         <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
@@ -68,7 +61,7 @@ class HeaderComponent extends Component {
               class="navbar-brand"
               to="/"
               className="text-warning"
-              onClick={this.props.getProductsFromCart}
+              onClick={getProductsFromCart}
             >
               <FontAwesomeIcon
                 icon={faStore}
@@ -80,7 +73,7 @@ class HeaderComponent extends Component {
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
-            {this.props.user && (
+            {user && (
               <Nav className="mr-5 text-left">
                 <Nav.Link>
                   <Link to="/add_product">
@@ -89,37 +82,39 @@ class HeaderComponent extends Component {
                     </div>
                   </Link>
                 </Nav.Link>
-                <Nav.Link>
-                  <Dropdown>
-                    <Dropdown.Toggle variant="warning" id="dropdown-basic">
-                      <FontAwesomeIcon icon={faAlignRight} className="mr-2" />
-                      Filter
-                    </Dropdown.Toggle>
+                {product.length > 2 && (
+                  <Nav.Link>
+                    <Dropdown>
+                      <Dropdown.Toggle variant="warning" id="dropdown-basic">
+                        <FontAwesomeIcon icon={faAlignRight} className="mr-2" />
+                        Filter
+                      </Dropdown.Toggle>
 
-                    <Dropdown.Menu>
-                      <Dropdown.Item onClick={this.props.priceLowToHighFilter}>
-                        Price Low
-                      </Dropdown.Item>
-                      <Dropdown.Item onClick={this.props.priceHighToLowFilter}>
-                        Price High
-                      </Dropdown.Item>
-                      <Dropdown.Item onClick={this.props.ascendingFilter}>
-                        A - Z
-                      </Dropdown.Item>
-                      <Dropdown.Item onClick={this.props.descendingFilter}>
-                        Z - A
-                      </Dropdown.Item>
-                    </Dropdown.Menu>
-                  </Dropdown>
-                </Nav.Link>
+                      <Dropdown.Menu>
+                        <Dropdown.Item onClick={priceLowToHighFilter}>
+                          Price Low
+                        </Dropdown.Item>
+                        <Dropdown.Item onClick={priceHighToLowFilter}>
+                          Price High
+                        </Dropdown.Item>
+                        <Dropdown.Item onClick={ascendingFilter}>
+                          A - Z
+                        </Dropdown.Item>
+                        <Dropdown.Item onClick={descendingFilter}>
+                          Z - A
+                        </Dropdown.Item>
+                      </Dropdown.Menu>
+                    </Dropdown>
+                  </Nav.Link>
+                )}
               </Nav>
             )}
             {/* Right Side Section */}
             <Nav className="ml-auto text-right">
-              {this.props.user ? (
+              {user ? (
                 <>
                   <Nav.Link>
-                    <Link to="/cart" onClick={this.props.getProductsFromCart}>
+                    <Link to="/cart" onClick={getProductsFromCart}>
                       <div className="btn btn-outline-warning my-2 my-sm-0 pb-0">
                         <h4 className="text-white">
                           <FontAwesomeIcon
@@ -128,17 +123,14 @@ class HeaderComponent extends Component {
                             className="mr-2"
                             size="1x"
                           />
-                          {this.props.cartCount}
+                          {cartCount}
                         </h4>
                       </div>
                     </Link>
                   </Nav.Link>
 
                   <Nav.Link>
-                    <div
-                      className="btn my-2 my-sm-0 pb-0"
-                      onClick={this.props.logout}
-                    >
+                    <div className="btn my-2 my-sm-0 pb-0" onClick={logout}>
                       <h6 className="text-light">
                         <FontAwesomeIcon
                           icon={faDoorClosed}
@@ -153,14 +145,11 @@ class HeaderComponent extends Component {
                 </>
               ) : (
                 <Nav.Link>
-                  <div
-                    className="btn my-2 my-sm-0 pb-0"
-                    onClick={this.props.handleSignup}
-                  >
+                  <div className="btn my-2 my-sm-0 pb-0" onClick={handleSignup}>
                     <h6 className="text-light">Signup / Login</h6>
                   </div>
-                  <SignupModal show={this.props.show} />
-                  <LoginModal show={this.props.showlogin} />
+                  <SignupModal show={show} />
+                  <LoginModal show={showlogin} />
                 </Nav.Link>
               )}
             </Nav>
@@ -177,6 +166,7 @@ const mapStateToProps = (state) => {
     showlogin: state.showlogin,
     isAuthorize: state.isAuthorize,
     user: state.user,
+    product: state.product,
   };
 };
 

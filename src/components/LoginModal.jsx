@@ -15,18 +15,15 @@ class LoginModal extends Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-
+    const {
+      props: { loginUser },
+    } = this;
     const user = {
       email: this.state.email,
       password: this.state.password,
     };
 
-    this.props.loginUser(user);
-    console.log(this.props.error);
-    if (this.props.error == null) {
-      this.props.handleClose();
-      this.setState({ email: "", password: "" });
-    }
+    loginUser(user);
   };
 
   handleInputChange = (event) => {
@@ -37,9 +34,14 @@ class LoginModal extends Component {
   };
 
   render() {
+    const {
+      handleSubmit,
+      handleInputChange,
+      props: { show, handleClose, handleSignup },
+    } = this;
     return (
       <>
-        <Modal show={this.props.show} size="lg" onHide={this.props.handleClose}>
+        <Modal show={show} size="lg" onHide={handleClose}>
           <Modal.Header closeButton>Login</Modal.Header>
           <Modal.Body className="text-center">
             <form>
@@ -52,7 +54,7 @@ class LoginModal extends Component {
                     className="form-control"
                     value={this.state.email}
                     name="email"
-                    onChange={this.handleInputChange}
+                    onChange={handleInputChange}
                   />
                 </div>
               </div>
@@ -65,24 +67,21 @@ class LoginModal extends Component {
                     className="form-control"
                     value={this.state.password}
                     name="password"
-                    onChange={this.handleInputChange}
+                    onChange={handleInputChange}
                   />
                 </div>
               </div>
 
               <div className="form-group row">
                 <div className="col-sm-10">
-                  <div onClick={this.handleSubmit}>
+                  <div onClick={handleSubmit}>
                     <div className="btn btn-primary ">Login</div>
                   </div>
                 </div>
               </div>
               <p>
                 Don't have account ?
-                <snap
-                  onClick={this.props.handleSignup}
-                  className=" btn text-success"
-                >
+                <snap onClick={handleSignup} className=" btn text-success">
                   Signup
                 </snap>
                 from here!

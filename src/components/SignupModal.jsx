@@ -24,7 +24,7 @@ class SignupModal extends Component {
     };
 
     this.props.signupUser(user);
-    this.props.handleClose();
+
     this.setState({ userName: "", email: "", password: "" });
   };
 
@@ -36,9 +36,14 @@ class SignupModal extends Component {
   };
 
   render() {
+    const {
+      handleSubmit,
+      handleInputChange,
+      props: { show, handleClose, handleLogin, error },
+    } = this;
     return (
       <>
-        <Modal show={this.props.show} size="lg" onHide={this.props.handleClose}>
+        <Modal show={show} size="lg" onHide={handleClose}>
           <Modal.Header closeButton>Signup</Modal.Header>
           <Modal.Body className="text-center">
             <form>
@@ -64,7 +69,7 @@ class SignupModal extends Component {
                     className="form-control"
                     value={this.state.email}
                     name="email"
-                    onChange={this.handleInputChange}
+                    onChange={handleInputChange}
                   />
                 </div>
               </div>
@@ -77,28 +82,27 @@ class SignupModal extends Component {
                     className="form-control"
                     value={this.state.password}
                     name="password"
-                    onChange={this.handleInputChange}
+                    onChange={handleInputChange}
                   />
                 </div>
               </div>
 
               <div className="form-group row">
                 <div className="col-sm-10">
-                  <div onClick={this.handleSubmit}>
+                  <div onClick={handleSubmit}>
                     <div className="btn btn-primary ">Signup</div>
                   </div>
                 </div>
               </div>
               <p>
-                Already have account{" "}
-                <snap
-                  onClick={this.props.handleLogin}
-                  className=" btn text-success"
-                >
+                Already have account
+                <snap onClick={handleLogin} className=" btn text-success">
                   Login
                 </snap>{" "}
                 from here!
               </p>
+
+              {error && <p>{error.message}</p>}
             </form>
           </Modal.Body>
         </Modal>
@@ -107,10 +111,16 @@ class SignupModal extends Component {
   }
 }
 
+const mapStateToProps = (state) => {
+  return {
+    error: state.error,
+  };
+};
+
 const mapDispatchToProps = {
   signupUser,
   handleClose,
   handleLogin,
 };
 
-export default connect(null, mapDispatchToProps)(SignupModal);
+export default connect(mapStateToProps, mapDispatchToProps)(SignupModal);

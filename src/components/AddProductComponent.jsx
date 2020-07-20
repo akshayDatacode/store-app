@@ -4,7 +4,7 @@ import {
   addProductDetails,
   updateProduct,
 } from "../redux/product/productAction";
-import { Link } from "react-router-dom";
+
 import { store } from "react-notifications-component";
 import "react-notifications-component/dist/theme.css";
 import "animate.css";
@@ -27,13 +27,14 @@ class AddProductComponent extends Component {
         discount: this.props.editProduct.discount,
         id: this.props.editProduct._id,
       });
-      console.log("Inside");
-    } else {
-      console.log("Out Side");
     }
   }
 
   handleSubmit = (event) => {
+    const {
+      props: { isEdit, addProductDetails, updateProduct },
+    } = this;
+
     event.preventDefault();
 
     const product = {
@@ -42,23 +43,41 @@ class AddProductComponent extends Component {
       quantity: this.state.quantity,
       discount: this.state.discount,
     };
-    if (!this.props.isEdit) {
-      this.props.addProductDetails(product);
-      store.addNotification({
-        title: "Success",
-        message: "Your New Product is Added",
-        type: "success", // 'default', 'success', 'info', 'warning'
-        container: "bottom-left", // where to position the notifications
-        animationIn: ["animated", "fadeIn"], // animate.css classes that's applied
-        animationOut: ["animated", "fadeOut"], // animate.css classes that's applied
-        dismiss: {
-          duration: 3000,
-        },
+    if (!isEdit) {
+      addProductDetails(product).then((res) => {
+        if (res.success) {
+          store.addNotification({
+            title: "Success",
+            message: "Your New Product is Added",
+            type: "success", // 'default', 'success', 'info', 'warning'
+            container: "bottom-right", // where to position the notifications
+            animationIn: ["animated", "fadeIn"], // animate.css classes that's applied
+            animationOut: ["animated", "fadeOut"], // animate.css classes that's applied
+            dismiss: {
+              duration: 3000,
+            },
+          });
+          window.location = "/";
+        }
       });
     } else {
-      this.props.updateProduct(product, this.state.id);
+      updateProduct(product, this.state.id).then((res) => {
+        if (res.success) {
+          store.addNotification({
+            title: "Success",
+            message: "Your product is edited",
+            type: "info", // 'default', 'success', 'info', 'warning'
+            container: "bottom-right", // where to position the notifications
+            animationIn: ["animated", "fadeIn"], // animate.css classes that's applied
+            animationOut: ["animated", "fadeOut"], // animate.css classes that's applied
+            dismiss: {
+              duration: 9000,
+            },
+          });
+          window.location = "/";
+        }
+      });
     }
-
     this.setState({ title: "", price: "", quantity: "", discount: "" });
   };
 
@@ -84,7 +103,6 @@ class AddProductComponent extends Component {
                 <div className="col-sm-10">
                   <input
                     className="form-control"
-                    placeholder="Sender Name"
                     value={this.state.title}
                     name="title"
                     onChange={this.handleInputChange}
@@ -98,7 +116,6 @@ class AddProductComponent extends Component {
                 <div className="col-sm-10">
                   <input
                     className="form-control"
-                    placeholder="Sender Name"
                     value={this.state.price}
                     name="price"
                     onChange={this.handleInputChange}
@@ -112,7 +129,6 @@ class AddProductComponent extends Component {
                 <div className="col-sm-10">
                   <input
                     className="form-control"
-                    placeholder="Sender Name"
                     value={this.state.quantity}
                     name="quantity"
                     onChange={this.handleInputChange}
@@ -126,7 +142,6 @@ class AddProductComponent extends Component {
                 <div className="col-sm-10">
                   <input
                     className="form-control"
-                    placeholder="Discount %"
                     name="discount"
                     value={this.state.discount}
                     onChange={this.handleInputChange}
@@ -134,13 +149,10 @@ class AddProductComponent extends Component {
                 </div>
               </div>
               {this.props.error && <p className="text-danger">Enter Data</p>}
-
-              <div className="form-group row">
-                <div className="col-sm-10">
+              <div className="form-group row ">
+                <div className="col-sm-10 text-center">
                   <div onClick={this.handleSubmit}>
-                    <Link to="/">
-                      <div className="btn btn-primary ">Add Product</div>
-                    </Link>
+                    <div className="btn btn-primary ">Add Product</div>
                   </div>
                 </div>
               </div>

@@ -6,7 +6,6 @@ import {
   editProduct,
   addToCart,
   updateQuntity,
-  decreaseQuntity,
   getProductsFromCart,
   updateProduct,
   handleSignup,
@@ -16,90 +15,118 @@ class MainComponent extends Component {
   state = {
     error: null,
     isEdit: false,
-    quantity: 0,
-    currentUser: {},
   };
 
   componentDidMount() {
-    const getDataFromLocalStorage = localStorage.getItem("userDetails");
-    const parseDataFromJSON = JSON.parse(getDataFromLocalStorage);
-    console.log("Local Storage Data", parseDataFromJSON);
-    this.setState({ currentUser: parseDataFromJSON });
-
     const {
       props: { getProductsFromCart, getProducts },
     } = this;
 
     getProductsFromCart();
-    getProducts();
-    // this.timer = setInterval(() => this.props.getProductsFromCart(), 500);
-    // this.timer2 = setInterval(() => this.props.getProducts(), 500);
+
+    getProducts().then((res) => {
+      console.log(res);
+    });
   }
 
-  // componentWillUnmount() {
-  //   clearTimeout(setTimeout(this.props.getProductsFromCart(), 500));
-  //   clearInterval(this.timer);
-  //   this.timer = null;
-  //   clearTimeout(setTimeout(this.props.getProducts(), 500));
-  //   clearInterval(this.timer2);
-  //   this.timer2 = null;
-  // }
-
   increaseQuntity = (item) => {
-    this.props.getProductsFromCart();
+    const {
+      props: {
+        cart,
+        user,
+        updateProduct,
+        updateQuntity,
+        handleSignup,
+        getProducts,
+        getProductsFromCart,
+      },
+    } = this;
+
     var userQuantity = 0;
-    console.log("Inside Increase Function");
-    this.props.cart.forEach((element) => {
-      if (item._id == element.productId && this.props.user) {
+    cart.forEach((element) => {
+      if (item._id == element.productId && user) {
         userQuantity = element.userQuantity + 1;
 
-        this.props.updateQuntity(element._id, { userQuantity }, item);
-        this.props.updateProduct({ userQuantity }, item._id);
-        console.log(userQuantity, element._id);
+        updateQuntity(element._id, { userQuantity }, item).then((res) => {
+          if (res.success) {
+            getProducts();
+          }
+        });
+
+        updateProduct({ userQuantity }, item._id).then((res) => {
+          if (res.success) {
+            getProductsFromCart();
+          }
+        });
       } else {
-        this.props.handleSignup();
+        handleSignup();
       }
     });
   };
 
   decreaseQuntity = (item) => {
-    this.props.getProductsFromCart();
+    const {
+      props: {
+        cart,
+        user,
+        updateProduct,
+        updateQuntity,
+        handleSignup,
+        getProducts,
+        getProductsFromCart,
+      },
+    } = this;
+
     var userQuantity = 0;
-    console.log("Inside Increase Function");
-    this.props.cart.forEach((element) => {
-      if (item._id == element.productId && this.props.user) {
+
+    cart.forEach((element) => {
+      if (item._id == element.productId && user) {
         userQuantity = element.userQuantity - 1;
 
-        this.props.updateQuntity(element._id, { userQuantity }, item);
-        this.props.updateProduct({ userQuantity }, item._id);
+        updateQuntity(element._id, { userQuantity }, item).then((res) => {
+          if (res.success) {
+            getProducts();
+          }
+        });
+
+        updateProduct({ userQuantity }, item._id).then((res) => {
+          if (res.success) {
+            getProductsFromCart();
+          }
+        });
         console.log(userQuantity, element._id);
       } else {
-        this.props.handleSignup();
+        handleSignup();
       }
     });
   };
 
   handleEditProduct = async (item) => {
+    const {
+      props: { isEdit, editProduct, handleSignup, user },
+    } = this;
+
     await this.setState((state) => {
-      if (this.props.isEdit) return { isEdit: false };
+      if (isEdit) return { isEdit: false };
     });
     console.log(item);
 
     this.setState({ isEdit: true });
-    if (this.props.user) {
-      this.props.editProduct(item);
+    if (user) {
+      editProduct(item);
     } else {
-      this.props.handleSignup();
+      handleSignup();
     }
   };
 
   handleAddToCart = async (item) => {
-    console.log("get ID ", item._id);
-
-    if (this.props.user) {
-      this.props.addToCart(item._id);
+    const {
+      props: { user, addToCart, handleSignup },
+    } = this;
+    if (user) {
+      addToCart(item._id);
     } else {
-      this.props.handleSignup();
+      handleSignup();
     }
   };
 
@@ -111,7 +138,7 @@ class MainComponent extends Component {
             <div className="col-1"></div>
             <div className="col-11">
               <HomeComponent
-                products={this.props.product}
+                product={this.props.product}
                 cart={this.props.cart}
                 quantity={this.state.quantity}
                 handleEditProduct={this.handleEditProduct}
@@ -142,7 +169,6 @@ const mapDispatchToProps = {
   editProduct,
   addToCart,
   updateQuntity,
-  decreaseQuntity,
   getProductsFromCart,
   updateProduct,
   handleSignup,
